@@ -441,7 +441,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                         <view key="tableFooterView" contentMode="scaleToFill" id="Ir7-d2-PNB">
-                            <rect key="frame" x="0.0" y="196" width="600" height="44"/>
+                            <rect key="frame" x="0.0" y="152" width="600" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
@@ -477,29 +477,6 @@
                                             </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="44" id="Wzx-we-00d">
-                                        <rect key="frame" x="0.0" y="152" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Wzx-we-00d" id="Mf2-Cz-HgQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="x6Bt0VDy5" placeholder="password" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0oD-q9-zqr">
-                                                    <rect key="frame" x="15" y="12" width="571" height="20"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
-                                                    <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
-                                                    <connections>
-                                                        <outlet property="delegate" destination="82H-U6-PtW" id="F0m-m9-dLg"/>
-                                                    </connections>
-                                                </textField>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="trailing" secondItem="0oD-q9-zqr" secondAttribute="trailing" constant="14" id="18R-iK-Sjf"/>
-                                                <constraint firstItem="0oD-q9-zqr" firstAttribute="leading" secondItem="Mf2-Cz-HgQ" secondAttribute="leading" constant="15" id="1Nh-w4-Tzc"/>
-                                                <constraint firstAttribute="centerY" secondItem="0oD-q9-zqr" secondAttribute="centerY" id="ivE-uj-XMd"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                 </cells>
                             </tableViewSection>
                         </sections>
@@ -522,7 +499,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="loginTextField" destination="6a8-0j-EHY" id="vJh-jx-Sve"/>
-                        <outlet property="passwordTextField" destination="0oD-q9-zqr" id="kba-gX-IXe"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Vv-p4-Oh8" userLabel="First Responder" sceneMemberID="firstResponder"/>

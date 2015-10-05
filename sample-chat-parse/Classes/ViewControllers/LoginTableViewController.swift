@@ -16,13 +16,12 @@ let kTestUsersDefaultPassword = "x6Bt0VDy5"
 class LoginTableViewController: UITableViewController {
 
     @IBOutlet weak var loginTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
     
     @IBAction func logInButtonClicked(sender: AnyObject) {
         
         SVProgressHUD.showWithStatus("SA_STR_LOGGIN_IN_AS".localized + self.loginTextField.text!, maskType: SVProgressHUDMaskType.Clear)
         
-        SessionService.logInWithUsername(self.loginTextField.text!, password: self.passwordTextField.text!) { (error) -> Void in
+        SessionService.logInWithUsername(self.loginTextField.text!, password: kTestUsersDefaultPassword) { (error) -> Void in
         
             self.registerForRemoteNotification()
             SVProgressHUD.showSuccessWithStatus("SA_STR_LOGGED_IN".localized)
@@ -35,7 +34,7 @@ class LoginTableViewController: UITableViewController {
         
         SVProgressHUD.showWithStatus("Signing Up as " + self.loginTextField.text!, maskType: SVProgressHUDMaskType.Clear)
         
-        SessionService.signUpWithUsername(self.loginTextField.text!, password: self.passwordTextField.text!) { (error) -> Void in
+        SessionService.signUpWithUsername(self.loginTextField.text!, password: kTestUsersDefaultPassword) { (error) -> Void in
             
             self.registerForRemoteNotification()
             SVProgressHUD.showSuccessWithStatus("SA_STR_LOGGED_IN".localized)
