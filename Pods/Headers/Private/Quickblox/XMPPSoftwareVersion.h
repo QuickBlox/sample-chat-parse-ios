@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/Core/External/XMPP/Extensions/XEP-0092/XMPPSoftwareVersion.h

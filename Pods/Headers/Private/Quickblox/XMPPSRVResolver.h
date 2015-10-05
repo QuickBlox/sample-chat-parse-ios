@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/Core/External/XMPP/Utilities/XMPPSRVResolver.h

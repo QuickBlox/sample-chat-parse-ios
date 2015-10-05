@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/Core/External/XMPP/Core/XMPPLogging.h

@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/Core/Helpers/SignHelper/SignHelper.h

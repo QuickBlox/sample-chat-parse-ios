@@ -1,0 +1,130 @@
+PODS:
+  - Bolts/Tasks (1.3.0)
+  - Parse (1.8.5):
+    - Bolts/Tasks (>= 1.2.2)
+  - QMChatViewController (0.2.2):
+    - QMChatViewController/Categories (= 0.2.2)
+    - QMChatViewController/KeyboardViewController (= 0.2.2)
+    - QMChatViewController/Protocols (= 0.2.2)
+    - QMChatViewController/Views (= 0.2.2)
+    - TTTAttributedLabel (~> 1.13)
+  - QMChatViewController/Categories (0.2.2):
+    - TTTAttributedLabel (~> 1.13)
+  - QMChatViewController/KeyboardViewController (0.2.2):
+    - TTTAttributedLabel (~> 1.13)
+  - QMChatViewController/Protocols (0.2.2):
+    - TTTAttributedLabel (~> 1.13)
+  - QMChatViewController/Views (0.2.2):
+    - QMChatViewController/Categories
+    - QMChatViewController/Protocols
+    - TTTAttributedLabel (~> 1.13)
+  - QMServices (0.2)
+  - Quickblox (2.3):
+    - Quickblox/AuthServiceFramework (= 2.3)
+    - Quickblox/BaseServiceFramework (= 2.3)
+    - Quickblox/BaseServiceFrameworkARC (= 2.3)
+    - Quickblox/ChatServiceFramework (= 2.3)
+    - Quickblox/ChatServiceFrameworkARC (= 2.3)
+    - Quickblox/ContentServiceFramework (= 2.3)
+    - Quickblox/CustomObjectsFramework (= 2.3)
+    - Quickblox/Header (= 2.3)
+    - Quickblox/LocationServiceFramework (= 2.3)
+    - Quickblox/PushNotificationsServiceFramework (= 2.3)
+    - Quickblox/QBAFNetworking (= 2.3)
+    - Quickblox/QBAuth (= 2.3)
+    - Quickblox/QBBase64 (= 2.3)
+    - Quickblox/QBChat (= 2.3)
+    - Quickblox/QBContent (= 2.3)
+    - Quickblox/QBCore (= 2.3)
+    - Quickblox/QBCustomObjects (= 2.3)
+    - Quickblox/QBLocation (= 2.3)
+    - Quickblox/QBPushNotifications (= 2.3)
+    - Quickblox/QBUsers (= 2.3)
+    - Quickblox/RatingsServiceFramework (= 2.3)
+    - Quickblox/UsersServiceFramework (= 2.3)
+  - Quickblox/AuthServiceFramework (2.3):
+    - Quickblox/BaseServiceFramework
+  - Quickblox/BaseServiceFramework (2.3):
+    - Quickblox/QBAFNetworking
+    - Quickblox/QBBase64
+    - Quickblox/QBCore
+  - Quickblox/BaseServiceFrameworkARC (2.3)
+  - Quickblox/ChatServiceFramework (2.3):
+    - Quickblox/BaseServiceFramework
+    - Quickblox/UsersServiceFramework
+  - Quickblox/ChatServiceFrameworkARC (2.3):
+    - Quickblox/BaseServiceFramework
+    - Quickblox/UsersServiceFramework
+  - Quickblox/ContentServiceFramework (2.3):
+    - Quickblox/BaseServiceFramework
+  - Quickblox/CustomObjectsFramework (2.3):
+    - Quickblox/BaseServiceFramework
+  - Quickblox/Header (2.3)
+  - Quickblox/LocationServiceFramework (2.3):
+    - Quickblox/BaseServiceFramework
+  - Quickblox/PushNotificationsServiceFramework (2.3):
+    - Quickblox/BaseServiceFramework
+  - Quickblox/QBAFNetworking (2.3)
+  - Quickblox/QBAuth (2.3):
+    - Quickblox/QBCore
+  - Quickblox/QBBase64 (2.3)
+  - Quickblox/QBChat (2.3):
+    - Quickblox/ChatServiceFramework
+    - Quickblox/QBCore
+  - Quickblox/QBContent (2.3):
+    - Quickblox/ContentServiceFramework
+    - Quickblox/QBCore
+  - Quickblox/QBCore (2.3)
+  - Quickblox/QBCustomObjects (2.3):
+    - Quickblox/CustomObjectsFramework
+    - Quickblox/QBCore
+  - Quickblox/QBLocation (2.3):
+    - Quickblox/LocationServiceFramework
+    - Quickblox/QBCore
+  - Quickblox/QBPushNotifications (2.3):
+    - Quickblox/PushNotificationsServiceFramework
+    - Quickblox/QBCore
+  - Quickblox/QBUsers (2.3):
+    - Quickblox/QBCore
+    - Quickblox/UsersServiceFramework
+  - Quickblox/RatingsServiceFramework (2.3):
+    - Quickblox/BaseServiceFramework
+    - Quickblox/LocationServiceFramework
+  - Quickblox/UsersServiceFramework (2.3):
+    - Quickblox/BaseServiceFramework
+  - SVProgressHUD (1.1.3)
+  - TTTAttributedLabel (1.13.4)
+  - TWMessageBarManager (1.7.2)
+
+DEPENDENCIES:
+  - Parse
+  - QMChatViewController (from `../quickblox-ios-sdk/QMChatViewControllerDevelopment.podspec`)
+  - QMServices (from `../quickblox-ios-sdk/QMServicesDevelopment.podspec`)
+  - Quickblox (from `../SDK-ios/`)
+  - SVProgressHUD
+  - TWMessageBarManager (~> 1.7.2)
+
+EXTERNAL SOURCES:
+  QMChatViewController:
+    :podspec: ../quickblox-ios-sdk/QMChatViewControllerDevelopment.podspec
+  QMServices:
+    :podspec: ../quickblox-ios-sdk/QMServicesDevelopment.podspec
+  Quickblox:
+    :path: ../SDK-ios/
+
+CHECKOUT OPTIONS:
+  QMServices:
+    :commit: db981bbea5e2258d185ee4c6adf662806a7f8f45
+    :git: https://github.com/QuickBlox/q-municate-services-ios.git
+
+SPEC CHECKSUMS:
+  Bolts: 805a4a87413e49d4a0c2b7d469084cbc46b09342
+  Parse: 17ad8e0677ed682f7f00503860fcda0f4eb74168
+  QMChatViewController: b9da4a55c3b9341f507bee781d85ae6afa1ab6c7
+  QMServices: 181d36029021b65881d6e9878680eb4db5b7baa2
+  Quickblox: 6b7dca2509adeff7de13772ae1231858b99de2dc
+  SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
+  TTTAttributedLabel: 0a2ac7b2dd726d32a070dafb01446026b11e624f
+  TWMessageBarManager: e7adc066ee425174f5dee79473fce913b1cd1662
+
+COCOAPODS: 0.38.2

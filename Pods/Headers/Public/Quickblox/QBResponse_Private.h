@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/QBCore/QBResponse_Private.h

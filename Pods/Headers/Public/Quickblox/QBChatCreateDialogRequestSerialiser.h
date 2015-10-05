@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/QBChat/QBChatCreateDialogRequestSerialiser.h

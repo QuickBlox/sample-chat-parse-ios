@@ -1,0 +1,2 @@
+QUICKBLOX_HEADER_SEARCH_PATHS = "$(SDKROOT)/usr/include/libxml2"
+QUICKBLOX_OTHER_LDFLAGS = -ObjC -l"iconv" -l"stdc++" -l"xml2" -framework "MobileCoreServices" -framework "SystemConfiguration"
