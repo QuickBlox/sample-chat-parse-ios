@@ -114,7 +114,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   QMServices:
-    :commit: db981bbea5e2258d185ee4c6adf662806a7f8f45
+    :commit: 617aa4f12aadfec1be7f7c32f83f6aa1718ac174
     :git: https://github.com/QuickBlox/q-municate-services-ios.git
 
 SPEC CHECKSUMS:
@@ -122,7 +122,7 @@ SPEC CHECKSUMS:
   Parse: 17ad8e0677ed682f7f00503860fcda0f4eb74168
   QMChatViewController: b9da4a55c3b9341f507bee781d85ae6afa1ab6c7
   QMServices: 181d36029021b65881d6e9878680eb4db5b7baa2
-  Quickblox: 6b7dca2509adeff7de13772ae1231858b99de2dc
+  Quickblox: 73d059380e7a6054908fb265643801dad1caf98b
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
   TTTAttributedLabel: 0a2ac7b2dd726d32a070dafb01446026b11e624f
   TWMessageBarManager: e7adc066ee425174f5dee79473fce913b1cd1662

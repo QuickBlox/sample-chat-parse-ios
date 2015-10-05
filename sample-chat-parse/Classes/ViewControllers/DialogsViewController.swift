@@ -112,7 +112,7 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
         
         if ServicesManager.instance().isAuthorized() {
             
-            self.navigationItem.title = "SA_STR_WELCOME".localized + " " + ServicesManager.instance().currentUser()!.fullName!
+            self.navigationItem.title = "SA_STR_WELCOME".localized + " " + ServicesManager.instance().currentUser()!.login!
             
             self.getDialogs(nil)
             

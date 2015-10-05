@@ -8,11 +8,6 @@
 
 import UIKit
 
-/**
- *  Default test users password
- */
-let kTestUsersDefaultPassword = "x6Bt0VDy5"
-
 class LoginTableViewController: UITableViewController {
 
     @IBOutlet weak var loginTextField: UITextField!

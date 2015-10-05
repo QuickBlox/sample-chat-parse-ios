@@ -13,10 +13,8 @@
 @import Foundation;
 @import SystemConfiguration;
 @import MobileCoreServices;
-@import Quickblox;
 
 #import <Parse/Parse.h>
-
 
 #import <QMServices.h>
 #import <SVProgressHUD.h>

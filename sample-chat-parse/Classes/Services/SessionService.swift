@@ -8,6 +8,8 @@
 
 import Foundation
 
+let kTestUsersDefaultPassword = "x6Bt0VDy5"
+
 typealias CompletionWithError = (error : NSError?) -> Void
 
 class SessionService : NSObject {
@@ -91,6 +93,7 @@ class SessionService : NSObject {
         if isCanRestoreSession {
             
             let parseUser = PFUser.currentUser()
+            parseUser!.password = kTestUsersDefaultPassword
             
             SessionService.logInWithParseUser(parseUser!, completion: completion)
         }

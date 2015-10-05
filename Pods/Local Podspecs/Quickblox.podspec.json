@@ -18,7 +18,6 @@
   "xcconfig": {
     "OTHER_LDFLAGS": "-ObjC"
   },
-  "public_header_files": "Framework/PublicHeaders/**.{h}",
   "subspecs": [
     {
       "name": "Header",
