@@ -7,11 +7,24 @@
 //
 
 
-class NewDialogViewController: UsersListTableViewController, QMChatServiceDelegate, QMChatConnectionDelegate {
+class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMChatConnectionDelegate, UISearchBarDelegate, UISearchResultsUpdating {
     var dialog: QBChatDialog?
+    var users : [QBUUser] = []
+    var findedUsers : [QBUUser] = []
+    
+    var searchController = UISearchController(searchResultsController: UsersSearchResultsController())
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.searchController.searchResultsUpdater = self
+        self.searchController.dimsBackgroundDuringPresentation = true
+        self.searchController.searchBar.delegate = self
+        (self.searchController.searchResultsController as! UsersSearchResultsController).tableView.delegate = self
+        
+        self.tableView.tableHeaderView = self.searchController.searchBar;
+        self.definesPresentationContext = true
+        
         self.checkCreateChatButtonState()
     }
     
@@ -23,6 +36,8 @@ class NewDialogViewController: UsersListTableViewController, QMChatServiceDelega
         if let _ = self.dialog {
             self.navigationItem.rightBarButtonItem?.title = "Done"
             self.title = "Add Occupants"
+            self.fetchUsers()
+            
         } else {
             self.navigationItem.rightBarButtonItem?.title = "Create"
             self.title = "New Chat"
@@ -34,42 +49,13 @@ class NewDialogViewController: UsersListTableViewController, QMChatServiceDelega
         self.checkCreateChatButtonState()
     }
     
-    func updateUsers() {
-        if let _ = self.dialog  {
-            
-            self.setupUsers(ServicesManager.instance().usersService.users()!)
-        }
-    }
-    
-    override func setupUsers(users: [QBUUser]) {
-    
-        var filteredUsers = users.filter({($0 as QBUUser).ID != ServicesManager.instance().currentUser().ID})
-        
-        if let _ = self.dialog  {
-            
-            filteredUsers = filteredUsers.filter({!(self.dialog!.occupantIDs as! [UInt]).contains(($0 as QBUUser).ID)})
-        }
-        
-        super.setupUsers(filteredUsers)
-    
-    }
-    
     func checkCreateChatButtonState() {
-        self.navigationItem.rightBarButtonItem?.enabled = tableView.indexPathsForSelectedRows?.count != nil
+        self.navigationItem.rightBarButtonItem?.enabled = self.users.count > 0
     }
     
     @IBAction func createChatButtonPressed(sender: AnyObject) {
 
         (sender as! UIBarButtonItem).enabled = false
-        
-        let selectedIndexes = self.tableView.indexPathsForSelectedRows
-        
-        var users: [QBUUser] = []
-        
-        for indexPath in selectedIndexes! {
-            let user = self.users![indexPath.row]
-            users.append(user)
-        }
         
         weak var weakSelf = self
         
@@ -115,12 +101,6 @@ class NewDialogViewController: UsersListTableViewController, QMChatServiceDelega
                 
             } else {
                 
-                let primaryUsers = ServicesManager.instance().usersService.users(withoutUser: ServicesManager.instance().currentUser())?.filter({(dialog.occupantIDs as! [UInt]).contains(($0 as QBUUser).ID)})
-                
-                if primaryUsers != nil && primaryUsers!.count > 0 {
-                    users.appendContentsOf(primaryUsers! as [QBUUser])
-                }
-                
                 let chatName = NewDialogViewController.nameForGroupChatWithUsers(users)
 
                 NewDialogViewController.createChat(chatName, users: users, completion: completion)
@@ -139,10 +119,10 @@ class NewDialogViewController: UsersListTableViewController, QMChatServiceDelega
                     var chatName = text
                     
                     if chatName!.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()).isEmpty {
-                        chatName = NewDialogViewController.nameForGroupChatWithUsers(users)
+                        chatName = NewDialogViewController.nameForGroupChatWithUsers(self.users)
                     }
                     
-                    NewDialogViewController.createChat(chatName, users: users, completion: completion)
+                    NewDialogViewController.createChat(chatName, users: self.users, completion: completion)
                     
                     }) { () -> Void in
                         
@@ -236,14 +216,43 @@ class NewDialogViewController: UsersListTableViewController, QMChatServiceDelega
     
     // MARK: - UITableViewDataSource
     
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        var numberOfRowsInSection = 0
+        
+        if (tableView == self.tableView) {
+            
+            numberOfRowsInSection = self.users.count
+            
+        } else {
+            
+            numberOfRowsInSection = self.findedUsers.count
+            
+        }
+        
+        return numberOfRowsInSection
+    }
+    
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("SA_STR_CELL_USER".localized, forIndexPath: indexPath) as! UserTableViewCell
         
-        let user = self.users![indexPath.row]
+        var cell : UITableViewCell
         
-        cell.setColorMarkerText(String(indexPath.row + 1), color: ServicesManager.instance().usersService.color(forUser: user))
-        cell.userDescription = user.fullName
-        cell.tag = indexPath.row
+        if (tableView == self.tableView) {
+            
+            let userCell = tableView.dequeueReusableCellWithIdentifier("SA_STR_CELL_USER".localized, forIndexPath: indexPath) as! UserTableViewCell
+            
+            userCell.tag = indexPath.row
+            
+            let user = self.users[indexPath.row]
+            userCell.userDescription = user.login
+            
+            cell = userCell
+            
+        } else {
+            
+            cell = UITableViewCell(style: UITableViewCellStyle.Default, reuseIdentifier: nil)
+            
+        }
         
         return cell
     }
@@ -251,11 +260,33 @@ class NewDialogViewController: UsersListTableViewController, QMChatServiceDelega
     // MARK: - UITableViewDelegate
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        self.checkCreateChatButtonState()
-    }
-
-    override func tableView(tableView: UITableView, didDeselectRowAtIndexPath indexPath: NSIndexPath) {
-        self.checkCreateChatButtonState()
+        
+        if tableView == self.tableView {
+            
+            if self.users.count > indexPath.row {
+                self.users.removeAtIndex(indexPath.row)
+                self.tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                
+                self.checkCreateChatButtonState()
+            }
+            
+        } else {
+            
+            let selectedUser = (self.searchController.searchResultsController as! UsersSearchResultsController).users[indexPath.row]
+            
+            if !self.users.contains(selectedUser) {
+                self.searchController.active = false
+                
+                self.users.append(selectedUser)
+                
+                let newIndexPath = NSIndexPath(forItem: self.users.count - 1, inSection: 0)
+                
+                self.tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+                
+                self.checkCreateChatButtonState()
+            }
+        }
+        
     }
     
     // MARK: - QMChatServiceDelegate
@@ -264,10 +295,79 @@ class NewDialogViewController: UsersListTableViewController, QMChatServiceDelega
         
         if (chatDialog.ID == self.dialog?.ID) {
             self.dialog = chatDialog
-            self.updateUsers()
             self.tableView.reloadData()
         }
         
     }
     
+    func updateSearchResultsForSearchController(searchController: UISearchController) {
+
+        let usersSearchResultsController = searchController.searchResultsController as! UsersSearchResultsController
+        
+        if searchController.searchBar.text?.characters.count < 3 {
+            
+            usersSearchResultsController.users.removeAll()
+            usersSearchResultsController.tableView.reloadData()
+            
+            return
+        }
+        
+        NSObject.cancelPreviousPerformRequestsWithTarget(self)
+        self.performSelector("performSearchUsersWithKeyWord:", withObject: searchController.searchBar.text!, afterDelay: 1.0)
+    }
+    
+    func performSearchUsersWithKeyWord(keyWord : String) {
+        
+        let usersSearchResultsController = self.searchController.searchResultsController as! UsersSearchResultsController
+        
+        QBRequest.usersWithFullName(keyWord, successBlock: { (response: QBResponse, page: QBGeneralResponsePage?, users: [QBUUser]?) -> Void in
+            
+            let filtredUsers = users?.filter({ (user : QBUUser) -> Bool in
+                let isEqual = !user.isEqual(ServicesManager.instance().currentUser())
+                
+                return isEqual
+            })
+            
+            usersSearchResultsController.users.removeAll()
+            usersSearchResultsController.users.appendContentsOf(filtredUsers!)
+            usersSearchResultsController.tableView.reloadData()
+            
+            }) { (response: QBResponse) -> Void in
+                
+        }
+        
+    }
+    
+    func fetchUsers() {
+        
+        var occupantIDs: [UInt] = []
+        
+        for occupantID in dialog!.occupantIDs! {
+            
+            if (UInt(occupantID.unsignedIntegerValue) == ServicesManager.instance().currentUser().ID) {
+                continue
+            }
+            
+            occupantIDs.append(UInt(occupantID))
+        }
+        
+        let usersIDs = occupantIDs.map { return String($0) }
+        
+        SVProgressHUD.showWithStatus("SA_STR_LOADING".localized, maskType: SVProgressHUDMaskType.Clear)
+        
+        QBRequest.usersWithIDs(usersIDs, page: nil, successBlock: { (response: QBResponse, page: QBGeneralResponsePage?, users: [QBUUser]?) -> Void in
+            
+            SVProgressHUD.showSuccessWithStatus("Users loaded")
+            
+            if let _ = users {
+                self.users.removeAll()
+                self.users.appendContentsOf(users!)
+                self.tableView.reloadData()
+            }
+            
+            }) { (response: QBResponse) -> Void in
+                
+                SVProgressHUD.showErrorWithStatus(response.error?.error?.localizedDescription)
+        }
+    }
 }

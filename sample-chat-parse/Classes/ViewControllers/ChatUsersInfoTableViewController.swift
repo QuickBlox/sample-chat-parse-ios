@@ -7,14 +7,11 @@
 //
 
 
-class ChatUsersInfoTableViewController: UsersListTableViewController, QMChatServiceDelegate, QMChatConnectionDelegate {
-    var occupantsIDs: [UInt] = []
-    var dialog: QBChatDialog?
+class ChatUsersInfoTableViewController: UITableViewController, QMChatServiceDelegate, QMChatConnectionDelegate {
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-    }
+    var occupantIDs : [UInt] = []
+    
+    var dialog: QBChatDialog?
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -22,24 +19,37 @@ class ChatUsersInfoTableViewController: UsersListTableViewController, QMChatServ
         ServicesManager.instance().chatService.addDelegate(self)
     }
     
-    func updateUsers() {
-        if let _ = self.dialog  {
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        self.occupantIDs.removeAll()
+        
+        for occupantID in dialog!.occupantIDs! {
             
-            self.setupUsers(ServicesManager.instance().usersService.users()!)
+            if (UInt(occupantID.unsignedIntegerValue) == ServicesManager.instance().currentUser().ID) {
+                continue
+            }
+            
+            self.occupantIDs.append(UInt(occupantID))
         }
+        
+        self.tableView.reloadData()
     }
     
-    override func setupUsers(users: [QBUUser]) {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        var filteredUsers = users.filter({($0 as QBUUser).ID != ServicesManager.instance().currentUser().ID})
+        return self.occupantIDs.count
+    }
+    
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        if let _ = self.dialog  {
-            
-            filteredUsers = filteredUsers.filter({(self.dialog!.occupantIDs as! [UInt]).contains(($0 as QBUUser).ID)})
-        }
+        let cell = tableView.dequeueReusableCellWithIdentifier("UserTableViewCellIdentifier", forIndexPath: indexPath) as! UserTableViewCell
         
-        super.setupUsers(filteredUsers)
+        let occupantID = self.occupantIDs[indexPath.row]
         
+        cell.userDescription = String(occupantID)
+        
+        return cell
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -50,15 +60,10 @@ class ChatUsersInfoTableViewController: UsersListTableViewController, QMChatServ
         }
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        tableView.deselectRowAtIndexPath(indexPath, animated: true)
-    }
-    
     func chatService(chatService: QMChatService!, didUpdateChatDialogInMemoryStorage chatDialog: QBChatDialog!) {
         
         if (chatDialog.ID == self.dialog!.ID) {
             self.dialog = chatDialog
-            self.updateUsers()
             self.tableView.reloadData()
         }
         

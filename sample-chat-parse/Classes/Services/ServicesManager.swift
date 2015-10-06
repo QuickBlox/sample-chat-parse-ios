@@ -11,12 +11,10 @@ import Foundation
 /**
 *  Implements user's memory/cache storing, error handling, show top bar notifications.
 */
-class ServicesManager: QMServicesManager, QMContactListServiceCacheDataSource {
+class ServicesManager: QMServicesManager {
     
     var currentDialogID : String = ""
     
-    private var contactListService : QMContactListService!
-    var usersService : UsersService!
     var notificationService: NotificationService!
     
     override init() {
@@ -27,8 +25,6 @@ class ServicesManager: QMServicesManager, QMContactListServiceCacheDataSource {
     
     private func setupContactServices() {
         QMContactListCache.setupDBWithStoreNamed("sample-cache-contacts")
-        self.contactListService = QMContactListService(serviceManager: self, cacheDataSource: self)
-        self.usersService = UsersService(contactListService: self.contactListService)
         self.notificationService = NotificationService()
     }
     
@@ -53,9 +49,7 @@ class ServicesManager: QMServicesManager, QMContactListServiceCacheDataSource {
     
         } else {
             
-            if let user = ServicesManager.instance().usersService.user(UInt(dialog.recipientID)) {
-                dialogName = user.login!
-            }
+            dialogName = String(dialog.recipientID)
         }
         
         TWMessageBarManager.sharedInstance().hideAll()
@@ -91,21 +85,5 @@ class ServicesManager: QMServicesManager, QMContactListServiceCacheDataSource {
     override func chatService(chatService: QMChatService!, didAddMessageToMemoryStorage message: QBChatMessage!, forDialogID dialogID: String!) {
         super.chatService(chatService, didAddMessageToMemoryStorage: message, forDialogID: dialogID)
         self.handleNewMessage(message, dialogID: dialogID)
-    }
-    
-    // MARK: QMContactListServiceCacheDataSource
-    
-    func cachedUsers(block: QMCacheCollection!) {
-        // Retrieving users from cache sorted by full name.
-        QMContactListCache.instance().usersSortedBy("fullName", ascending: true) { (users: [AnyObject]!) -> Void in
-            block(users)
-        }
-    }
-    
-    func cachedContactListItems(block: QMCacheCollection!) {
-        // Retrieving all contact list items.
-        QMContactListCache.instance().contactListItems { (items: [AnyObject]!) -> Void in
-            block(items)
-        }
     }
 }

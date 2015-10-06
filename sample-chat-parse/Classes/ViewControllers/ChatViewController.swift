@@ -106,11 +106,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             
             var viewControllers: [UIViewController] = []
             
-            if let loginViewControllers = self.navigationController?.viewControllers[0] as? LoginTableViewController {
-                viewControllers.append(loginViewControllers)
-            }
-            
-            if let dialogsViewControllers = self.navigationController?.viewControllers[1] as? DialogsViewController {
+            if let dialogsViewControllers = self.navigationController?.viewControllers[0] as? DialogsViewController {
                 viewControllers.append(dialogsViewControllers)
             }
             
@@ -163,9 +159,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         if self.dialog?.type != QBChatDialogType.Private {
             self.title = self.dialog?.name
         } else {
-            if let recepeint = ServicesManager.instance().usersService.user(UInt(self.dialog!.recipientID)) {
-                self.title = recepeint.login
-            }
+            self.title = String(self.dialog!.recipientID)
         }
     }
     
@@ -388,14 +382,10 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             
             if !messageReadIDs.isEmpty {
                 for readID : Int in messageReadIDs {
-                    let user = ServicesManager.instance().usersService.user(UInt(readID))
                     
-                    if user != nil {
-                        readersLogin.append(user!.login!)
-                    } else {
-                        readersLogin.append("Unknown")
-                    }
+                    readersLogin.append(String(readID))
                 }
+                
                 if message.attachments?.count > 0 {
                     statusString += "Seen:" + readersLogin.joinWithSeparator(", ")
                 } else {
@@ -413,18 +403,9 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             }
             
             if !messageDeliveredIDs.isEmpty {
+                
                 for deliveredID : Int in messageDeliveredIDs {
-                    let user = ServicesManager.instance().usersService.user(UInt(deliveredID))
-                    
-                    if readersLogin.contains(user!.login!) {
-                        continue
-                    }
-                    
-                    if user != nil {
-                        deliveredLogin.append(user!.login!)
-                    } else {
-                        deliveredLogin.append("Unknown");
-                    }
+                    deliveredLogin.append(String(deliveredID));
                 }
                 
                 if readersLogin.count > 0 && deliveredLogin.count > 0 {
@@ -523,11 +504,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         attributes[NSForegroundColorAttributeName] = UIColor(red: 11.0/255.0, green: 96.0/255.0, blue: 255.0/255.0, alpha: 1.0)
         attributes[NSFontAttributeName] = UIFont(name: "Helvetica", size: 17)
         
-        var topLabelAttributedString : NSAttributedString?
-        
-        if let topLabelText = ServicesManager.instance().usersService.user(messageItem.senderID)?.login {
-            topLabelAttributedString = NSAttributedString(string: topLabelText, attributes: attributes)
-        }
+        let topLabelAttributedString = NSAttributedString(string: String(messageItem.senderID), attributes: attributes)
         
         return topLabelAttributedString
     }

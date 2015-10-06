@@ -27,10 +27,7 @@ class DialogTableViewCellModel: NSObject {
                 return
             }
             
-            // Getting recipient from users service.
-            if let recipient = ServicesManager.instance().usersService.user(UInt(dialog.recipientID)) {
-                self.textLabelText = recipient.login ?? recipient.email!
-            }
+            self.textLabelText = String(dialog.recipientID)
             
         } else if dialog.type == .Group {
             self.detailTextLabelText = "SA_STR_GROUP".localized
@@ -121,6 +118,8 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
             if SessionService.isCanRestoreSession() {
                 
                 SessionService.restoreSession({ (error) -> Void in
+                    self.navigationItem.title = "SA_STR_WELCOME".localized + " " + ServicesManager.instance().currentUser()!.login!
+                    
                     self.getDialogs(nil)
                 })
                 
@@ -178,13 +177,9 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
             if let strongSelf = self {
                 SessionService.logOut({ (error) -> Void in
                     
-                    NSNotificationCenter.defaultCenter().removeObserver(strongSelf)
-                    ServicesManager.instance().chatService.removeDelegate(strongSelf)
-                    strongSelf.navigationController?.popViewControllerAnimated(true)
-                    
                     SVProgressHUD.showSuccessWithStatus("SA_STR_COMPLETED".localized)
                     
-                    self?.performSegueWithIdentifier("goToAuth", sender: nil);
+                    strongSelf.performSegueWithIdentifier("goToAuth", sender: nil);
                 })
             }
         }
