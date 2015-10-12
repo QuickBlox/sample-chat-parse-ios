@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/External/XMPP/Extensions/XEP-0066/XMPPIQ+XEP_0066.h

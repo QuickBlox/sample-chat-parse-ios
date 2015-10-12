@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/External/XMPP/Authentication/Plain/XMPPPlainAuthentication.h

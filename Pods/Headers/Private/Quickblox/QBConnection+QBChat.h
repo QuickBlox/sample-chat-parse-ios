@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/QBChat/QBConnection+QBChat.h

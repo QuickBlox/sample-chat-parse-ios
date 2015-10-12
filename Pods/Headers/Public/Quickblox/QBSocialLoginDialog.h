@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/UI/Social/QBSocialLoginDialog.h

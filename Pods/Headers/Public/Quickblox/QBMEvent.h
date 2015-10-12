@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/PublicHeaders/QBMEvent.h

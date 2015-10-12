@@ -1,7 +1,7 @@
 PODS:
   - Bolts/Tasks (1.3.0)
-  - Parse (1.8.5):
-    - Bolts/Tasks (>= 1.2.2)
+  - Parse (1.9.0):
+    - Bolts/Tasks (>= 1.3.0)
   - QMCVDevelopment (0.2.4):
     - QMCVDevelopment/Categories (= 0.2.4)
     - QMCVDevelopment/KeyboardViewController (= 0.2.4)
@@ -24,79 +24,7 @@ PODS:
     - SDWebImage (~> 3.6)
     - TTTAttributedLabel (~> 1.13)
   - QMServicesDevelopment (0.2.2)
-  - Quickblox (2.3):
-    - Quickblox/AuthServiceFramework (= 2.3)
-    - Quickblox/BaseServiceFramework (= 2.3)
-    - Quickblox/BaseServiceFrameworkARC (= 2.3)
-    - Quickblox/ChatServiceFramework (= 2.3)
-    - Quickblox/ChatServiceFrameworkARC (= 2.3)
-    - Quickblox/ContentServiceFramework (= 2.3)
-    - Quickblox/CustomObjectsFramework (= 2.3)
-    - Quickblox/Header (= 2.3)
-    - Quickblox/LocationServiceFramework (= 2.3)
-    - Quickblox/PushNotificationsServiceFramework (= 2.3)
-    - Quickblox/QBAFNetworking (= 2.3)
-    - Quickblox/QBAuth (= 2.3)
-    - Quickblox/QBBase64 (= 2.3)
-    - Quickblox/QBChat (= 2.3)
-    - Quickblox/QBContent (= 2.3)
-    - Quickblox/QBCore (= 2.3)
-    - Quickblox/QBCustomObjects (= 2.3)
-    - Quickblox/QBLocation (= 2.3)
-    - Quickblox/QBPushNotifications (= 2.3)
-    - Quickblox/QBUsers (= 2.3)
-    - Quickblox/RatingsServiceFramework (= 2.3)
-    - Quickblox/UsersServiceFramework (= 2.3)
-  - Quickblox/AuthServiceFramework (2.3):
-    - Quickblox/BaseServiceFramework
-  - Quickblox/BaseServiceFramework (2.3):
-    - Quickblox/QBAFNetworking
-    - Quickblox/QBBase64
-    - Quickblox/QBCore
-  - Quickblox/BaseServiceFrameworkARC (2.3)
-  - Quickblox/ChatServiceFramework (2.3):
-    - Quickblox/BaseServiceFramework
-    - Quickblox/UsersServiceFramework
-  - Quickblox/ChatServiceFrameworkARC (2.3):
-    - Quickblox/BaseServiceFramework
-    - Quickblox/UsersServiceFramework
-  - Quickblox/ContentServiceFramework (2.3):
-    - Quickblox/BaseServiceFramework
-  - Quickblox/CustomObjectsFramework (2.3):
-    - Quickblox/BaseServiceFramework
-  - Quickblox/Header (2.3)
-  - Quickblox/LocationServiceFramework (2.3):
-    - Quickblox/BaseServiceFramework
-  - Quickblox/PushNotificationsServiceFramework (2.3):
-    - Quickblox/BaseServiceFramework
-  - Quickblox/QBAFNetworking (2.3)
-  - Quickblox/QBAuth (2.3):
-    - Quickblox/QBCore
-  - Quickblox/QBBase64 (2.3)
-  - Quickblox/QBChat (2.3):
-    - Quickblox/ChatServiceFramework
-    - Quickblox/QBCore
-  - Quickblox/QBContent (2.3):
-    - Quickblox/ContentServiceFramework
-    - Quickblox/QBCore
-  - Quickblox/QBCore (2.3)
-  - Quickblox/QBCustomObjects (2.3):
-    - Quickblox/CustomObjectsFramework
-    - Quickblox/QBCore
-  - Quickblox/QBLocation (2.3):
-    - Quickblox/LocationServiceFramework
-    - Quickblox/QBCore
-  - Quickblox/QBPushNotifications (2.3):
-    - Quickblox/PushNotificationsServiceFramework
-    - Quickblox/QBCore
-  - Quickblox/QBUsers (2.3):
-    - Quickblox/QBCore
-    - Quickblox/UsersServiceFramework
-  - Quickblox/RatingsServiceFramework (2.3):
-    - Quickblox/BaseServiceFramework
-    - Quickblox/LocationServiceFramework
-  - Quickblox/UsersServiceFramework (2.3):
-    - Quickblox/BaseServiceFramework
+  - QuickBlox (2.4.4)
   - SDWebImage (3.7.3):
     - SDWebImage/Core (= 3.7.3)
   - SDWebImage/Core (3.7.3)
@@ -110,7 +38,7 @@ DEPENDENCIES:
     branch `development`)
   - QMServicesDevelopment (from `git@github.com:QuickBlox/q-municate-services-ios.git`,
     branch `development`)
-  - Quickblox (from `../SDK-ios/`)
+  - QuickBlox
   - SVProgressHUD
   - TWMessageBarManager (~> 1.7.2)
 
@@ -121,23 +49,21 @@ EXTERNAL SOURCES:
   QMServicesDevelopment:
     :branch: development
     :git: git@github.com:QuickBlox/q-municate-services-ios.git
-  Quickblox:
-    :path: ../SDK-ios/
 
 CHECKOUT OPTIONS:
   QMCVDevelopment:
     :commit: e4cd60bac41b21e0e47afd8fca0ac80d83382b55
     :git: git@github.com:QuickBlox/QMChatViewController-ios.git
   QMServicesDevelopment:
-    :commit: db92e46fc73c66d0bab4b0e7b0e9e9ab1fda079d
+    :commit: b5d7821e06c8b696c2591fe1ccf30d7fccc52345
     :git: git@github.com:QuickBlox/q-municate-services-ios.git
 
 SPEC CHECKSUMS:
   Bolts: 805a4a87413e49d4a0c2b7d469084cbc46b09342
-  Parse: 17ad8e0677ed682f7f00503860fcda0f4eb74168
+  Parse: 712efbc476d4f47b0f96b70db7e53101575753aa
   QMCVDevelopment: 750ffd0c0f1be84eb659635a142aa3fb94be07ee
   QMServicesDevelopment: 6de5f0f4467c9214014fb8d778ccc4d4aa71833c
-  Quickblox: 73d059380e7a6054908fb265643801dad1caf98b
+  QuickBlox: a4cdf1b4e1997214a063205c237bcef3d0feccfd
   SDWebImage: 1d2b1a1efda1ade1b00b6f8498865f8ddedc8a84
   SVProgressHUD: 748080e4f36e603f6c02aec292664239df5279c1
   TTTAttributedLabel: 0a2ac7b2dd726d32a070dafb01446026b11e624f
