@@ -320,22 +320,26 @@ class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMC
         
         let usersSearchResultsController = self.searchController.searchResultsController as! UsersSearchResultsController
         
-        QBRequest.usersWithFullName(keyWord, successBlock: { (response: QBResponse, page: QBGeneralResponsePage?, users: [QBUUser]?) -> Void in
-            
-            let filtredUsers = users?.filter({ (user : QBUUser) -> Bool in
-                let isEqual = !user.isEqual(ServicesManager.instance().currentUser())
+        ServicesManager.instance().usersService.searchUsersWithFullName(keyWord, pagedRequest: nil, cancellationToken: nil).continueWithBlock { (task: BFTask!) -> AnyObject! in
+            if task.error != nil {
                 
-                return isEqual
-            })
-            
-            usersSearchResultsController.users.removeAll()
-            usersSearchResultsController.users.appendContentsOf(filtredUsers!)
-            usersSearchResultsController.tableView.reloadData()
-            
-            }) { (response: QBResponse) -> Void in
+            } else if task.cancelled {
                 
+            } else {
+                
+                let filteredUsers = (task.result as! [QBUUser]).filter({ (user : QBUUser) -> Bool in
+                    let isEqual = !user.isEqual(ServicesManager.instance().currentUser())
+                    
+                    return isEqual
+                })
+                
+                usersSearchResultsController.users.removeAll()
+                usersSearchResultsController.users.appendContentsOf(filteredUsers)
+                usersSearchResultsController.tableView.reloadData()
+                
+            }
+            return nil
         }
-        
     }
     
     func fetchUsers() {

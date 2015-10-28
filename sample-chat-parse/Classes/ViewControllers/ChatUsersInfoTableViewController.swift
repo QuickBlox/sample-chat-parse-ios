@@ -10,6 +10,7 @@
 class ChatUsersInfoTableViewController: UITableViewController, QMChatServiceDelegate, QMChatConnectionDelegate {
     
     var occupantIDs : [UInt] = []
+    var users : [QBUUser] = []
     
     var dialog: QBChatDialog?
     
@@ -33,21 +34,32 @@ class ChatUsersInfoTableViewController: UITableViewController, QMChatServiceDele
             self.occupantIDs.append(UInt(occupantID))
         }
         
-        self.tableView.reloadData()
+        ServicesManager.instance().usersService.retrieveIfNeededUsersWithIDs(self.occupantIDs).continueWithBlock {[unowned self] (task : BFTask!) -> AnyObject! in
+            
+            let users : [QBUUser] = task.result as! [QBUUser]
+            
+            for user in users {
+                self.users.append(user)
+            }
+            
+            self.tableView.reloadData()
+            
+            return nil
+        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        return self.occupantIDs.count
+        return self.users.count
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("UserTableViewCellIdentifier", forIndexPath: indexPath) as! UserTableViewCell
         
-        let occupantID = self.occupantIDs[indexPath.row]
+        let user : QBUUser = self.users[indexPath.row]
         
-        cell.userDescription = String(occupantID)
+        cell.userDescription = user.login
         
         return cell
     }
@@ -61,12 +73,10 @@ class ChatUsersInfoTableViewController: UITableViewController, QMChatServiceDele
     }
     
     func chatService(chatService: QMChatService!, didUpdateChatDialogInMemoryStorage chatDialog: QBChatDialog!) {
-        
         if (chatDialog.ID == self.dialog!.ID) {
             self.dialog = chatDialog
             self.tableView.reloadData()
         }
-        
     }
     
 }

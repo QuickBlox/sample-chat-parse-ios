@@ -122,6 +122,11 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         if let dialog = self.dialog {
             // Saving current dialog ID.
             ServicesManager.instance().currentDialogID = dialog.ID!
+            
+            ServicesManager.instance().usersService.retrieveIfNeededUsersWithIDs(dialog.occupantIDs).continueWithBlock({ [weak self] (task: BFTask!) -> AnyObject! in
+                self?.refreshCollectionView()
+                return nil
+            })
         }
     }
 	
@@ -382,14 +387,17 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             
             if !messageReadIDs.isEmpty {
                 for readID : Int in messageReadIDs {
-                    
-                    readersLogin.append(String(readID))
+                    if let user = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(UInt(readID)) {
+                        readersLogin.append(user.login!)
+                    } else {
+                        readersLogin.append(String(readID))
+                    }
                 }
                 
                 if message.attachments?.count > 0 {
-                    statusString += "Seen:" + readersLogin.joinWithSeparator(", ")
+                    statusString += "Seen: " + readersLogin.joinWithSeparator(", ")
                 } else {
-                    statusString += "Read:" + readersLogin.joinWithSeparator(", ")
+                    statusString += "Read: " + readersLogin.joinWithSeparator(", ")
                 }
 
             }
@@ -405,7 +413,10 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             if !messageDeliveredIDs.isEmpty {
                 
                 for deliveredID : Int in messageDeliveredIDs {
-                    deliveredLogin.append(String(deliveredID));
+                    if let user = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(UInt(deliveredID)) {                    deliveredLogin.append(user.login!);
+                    } else {
+                        deliveredLogin.append(String(deliveredID))
+                    }
                 }
                 
                 if readersLogin.count > 0 && deliveredLogin.count > 0 {
@@ -413,7 +424,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
                 }
                 
                 if deliveredLogin.count > 0 {
-                    statusString += "Delivered:" + deliveredLogin.joinWithSeparator(" ,")
+                    statusString += "Delivered: " + deliveredLogin.joinWithSeparator(" ,")
                 }
             }
         }
