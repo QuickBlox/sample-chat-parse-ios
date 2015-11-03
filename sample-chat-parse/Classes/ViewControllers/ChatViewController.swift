@@ -123,7 +123,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             // Saving current dialog ID.
             ServicesManager.instance().currentDialogID = dialog.ID!
             
-            ServicesManager.instance().usersService.retrieveIfNeededUsersWithIDs(dialog.occupantIDs).continueWithBlock({ [weak self] (task: BFTask!) -> AnyObject! in
+            ServicesManager.instance().usersService.retrieveUsersWithIDs(dialog.occupantIDs).continueWithBlock({ [weak self] (task: BFTask!) -> AnyObject! in
                 self?.refreshCollectionView()
                 return nil
             })

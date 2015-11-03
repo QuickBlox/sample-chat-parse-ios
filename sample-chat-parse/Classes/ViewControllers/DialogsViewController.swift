@@ -92,7 +92,7 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
         
         NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationDidBecomeActiveNotification, object: nil, queue: NSOperationQueue.mainQueue()) { (notification: NSNotification) -> Void in
             
-            if !QBChat.instance().isLoggedIn() {
+            if !QBChat.instance().isConnected() {
                 SVProgressHUD.showWithStatus("SA_STR_CONNECTING_TO_CHAT".localized, maskType: SVProgressHUDMaskType.Clear)
                 
                 weakSelf?.shouldUpdateDialogsAfterLogIn = true
@@ -252,9 +252,7 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
             // Notifies occupants that user left the dialog.
             if dialog.type != QBChatDialogType.Private {
                 
-                ServicesManager.instance().chatService.joinToGroupDialog(dialog, failed: { (error: NSError!) -> Void in
-
-                })
+                ServicesManager.instance().chatService.joinToGroupDialog(dialog, completion: nil)
             }
         }
     }
@@ -349,8 +347,7 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
                     dialog.occupantIDs = occupantIDs
                     
                     // Notifies occupants that user left the dialog.
-                    ServicesManager.instance().chatService.notifyAboutUpdateDialog(dialog, occupantsCustomParameters: nil, notificationText:"User \(ServicesManager.instance().currentUser().login) has left the dialog", completion: { (error: NSError!) -> Void in
-                        
+                    ServicesManager.instance().chatService.notifyAboutUpdateDialog(dialog, occupantsCustomParameters: nil, notificationText: "User \(ServicesManager.instance().currentUser().login) has left the dialog", completion: { (error) -> Void in
                         deleteDialogBlock(dialog)
                     })
                 }
@@ -374,9 +371,7 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
             
             // Performing join to the group dialogs.
             if dialog.type != QBChatDialogType.Private {
-                ServicesManager.instance().chatService.joinToGroupDialog(dialog, failed: { (error: NSError!) -> Void in
-                    
-                })
+                ServicesManager.instance().chatService.joinToGroupDialog(dialog, completion: nil)
             }
         }
         
@@ -386,9 +381,7 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
     func chatService(chatService: QMChatService!, didAddChatDialogToMemoryStorage chatDialog: QBChatDialog!) {
         // Performing join to the group dialogs.
         if chatDialog.type != QBChatDialogType.Private {
-            ServicesManager.instance().chatService.joinToGroupDialog(chatDialog, failed: { (error: NSError!) -> Void in
-                
-            })
+            ServicesManager.instance().chatService.joinToGroupDialog(chatDialog, completion: nil)
         }
         
         self.tableView.reloadData()

@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/ChatService/Classes/Utils/QBChatUtils.h

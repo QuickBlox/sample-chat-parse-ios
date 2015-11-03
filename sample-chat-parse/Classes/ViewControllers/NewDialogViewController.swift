@@ -320,7 +320,7 @@ class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMC
         
         let usersSearchResultsController = self.searchController.searchResultsController as! UsersSearchResultsController
         
-        ServicesManager.instance().usersService.searchUsersWithFullName(keyWord, pagedRequest: nil, cancellationToken: nil).continueWithBlock { (task: BFTask!) -> AnyObject! in
+        ServicesManager.instance().usersService.searchUsersWithFullName(keyWord).continueWithBlock { (task: BFTask!) -> AnyObject! in
             if task.error != nil {
                 
             } else if task.cancelled {

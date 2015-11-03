@@ -11,25 +11,17 @@ import Foundation
 /**
 *  Implements user's memory/cache storing, error handling, show top bar notifications.
 */
-class ServicesManager: QMServicesManager, QMUsersServiceDelegate, QMUsersServiceCacheDataSource {
+class ServicesManager: QMServicesManager {
     
     var currentDialogID : String = ""
     
     var notificationService: NotificationService!
-    var usersService: QMUsersService!
     
     override init() {
         super.init()
         
         self.setupContactServices()
-        self.setupUsersService()
         
-    }
-    
-    private func setupUsersService() {
-        QMUsersCache.setupDBWithStoreNamed("sample-cache-users")
-        self.usersService = QMUsersService(serviceManager: self, cacheDataSource: self)
-        self.usersService.addDelegate(self)
     }
     
     private func setupContactServices() {
@@ -94,19 +86,5 @@ class ServicesManager: QMServicesManager, QMUsersServiceDelegate, QMUsersService
     override func chatService(chatService: QMChatService!, didAddMessageToMemoryStorage message: QBChatMessage!, forDialogID dialogID: String!) {
         super.chatService(chatService, didAddMessageToMemoryStorage: message, forDialogID: dialogID)
         self.handleNewMessage(message, dialogID: dialogID)
-    }
-    
-    func usersService(usersService: QMUsersService!, didAddUsers user: [QBUUser]!) {
-        QMUsersCache.instance().insertOrUpdateUsers(user)
-    }
-    
-    func cachedUsers(block: (([AnyObject]!) -> Void)!) {
-        QMUsersCache.instance().usersSortedBy("id", ascending:true).continueWithExecutor(BFExecutor.mainThreadExecutor(), withBlock: { (task: BFTask!) -> AnyObject! in
-            if block != nil {
-                let users : [AnyObject] = task.result as! [AnyObject]
-                block(users)
-            }
-            return nil
-        })
     }
 }

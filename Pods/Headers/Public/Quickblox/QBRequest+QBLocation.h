@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/PublicHeaders/QBRequest+QBLocation.h

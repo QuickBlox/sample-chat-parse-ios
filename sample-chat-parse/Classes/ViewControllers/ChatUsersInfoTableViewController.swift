@@ -34,7 +34,7 @@ class ChatUsersInfoTableViewController: UITableViewController, QMChatServiceDele
             self.occupantIDs.append(UInt(occupantID))
         }
         
-        ServicesManager.instance().usersService.retrieveIfNeededUsersWithIDs(self.occupantIDs).continueWithBlock {[unowned self] (task : BFTask!) -> AnyObject! in
+        ServicesManager.instance().usersService.retrieveUsersWithIDs(self.occupantIDs).continueWithBlock {[unowned self] (task : BFTask!) -> AnyObject! in
             
             let users : [QBUUser] = task.result as! [QBUUser]
             

@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/ChatService/Classes/Net/Server/Categories/XMPPMessage+QBChatExtension.h

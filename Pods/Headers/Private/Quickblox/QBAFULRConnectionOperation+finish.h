@@ -1,0 +1,1 @@
+../../../../../SDK-ios/Framework/Core/Helpers/QBNetworking/QBAFULRConnectionOperation+finish.h
