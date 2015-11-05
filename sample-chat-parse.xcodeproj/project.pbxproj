@@ -28,7 +28,7 @@
 		68440D4EE3FECE357167667C /* CornerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68440A2C1E78F6FC561A7A09 /* CornerView.swift */; };
 		68440EE02D9A7184D21DF0F7 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68440EF02AB27CCF47A87701 /* AlertView.swift */; };
 		864DDA2C1B5FEF3900D4A22F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 864DDA2B1B5FEF3900D4A22F /* Constants.swift */; };
-		9201A9EF1BC2C7A500047B13 /* UsersSearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9201A9EE1BC2C7A500047B13 /* UsersSearchResultsController.swift */; settings = {ASSET_TAGS = (); }; };
+		9201A9EF1BC2C7A500047B13 /* UsersSearchResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9201A9EE1BC2C7A500047B13 /* UsersSearchResultsController.swift */; };
 		92B02D141B4C374400752D18 /* DialogTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92B02D131B4C374400752D18 /* DialogTableViewCell.swift */; };
 		E3F8AED4F4440098C11FBD3A /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BA0B02E7C454E30DCBD49B39 /* libPods.a */; };
 /* End PBXBuildFile section */
