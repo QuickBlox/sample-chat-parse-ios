@@ -22,10 +22,11 @@ class ServicesManager: QMServicesManager {
         
         self.setupContactServices()
         
+        self.usersService.loadFromCache()
+        
     }
     
     private func setupContactServices() {
-        QMContactListCache.setupDBWithStoreNamed("sample-cache-contacts")
         self.notificationService = NotificationService()
     }
     
@@ -47,14 +48,48 @@ class ServicesManager: QMServicesManager {
             if dialog.name != nil {
                 dialogName = dialog.name!
             }
-    
+            
         } else {
             
-            dialogName = String(dialog.recipientID)
+            if let user = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(UInt(dialog.recipientID)) {
+                dialogName = user.login!
+            }
         }
         
         TWMessageBarManager.sharedInstance().hideAll()
         TWMessageBarManager.sharedInstance().showMessageWithTitle(dialogName, description: message.text, type: TWMessageBarMessageType.Info)
+    }
+    
+    // MARK: dialog utils
+    
+    func joinAllGroupDialogs() {
+        let allDialogs: Array<QBChatDialog> = ServicesManager.instance().chatService.dialogsMemoryStorage.dialogsSortByUpdatedAtWithAscending(false) as! Array<QBChatDialog>
+        for dialog : QBChatDialog in allDialogs {
+            
+            // Notifies occupants that user left the dialog.
+            if dialog.type != QBChatDialogType.Private {
+                
+                self.chatService.joinToGroupDialog(dialog, completion: { (error: NSError?) -> Void in
+                    if (error != nil) {
+                        NSLog("Failed to join dialog with error: %@", error!)
+                    }
+                })
+            }
+        }
+    }
+    
+    // MARK: Last activity date
+    
+    var lastActivityDate: NSDate? {
+        get {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            return defaults.valueForKey("SA_STR_LAST_ACTIVITY_DATE".localized) as! NSDate?
+        }
+        set {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setObject(newValue, forKey: "SA_STR_LAST_ACTIVITY_DATE".localized)
+            defaults.synchronize()
+        }
     }
     
     // MARK: QMServiceManagerProtocol

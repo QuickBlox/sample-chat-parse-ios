@@ -9,8 +9,8 @@
 import UIKit
 
 let kQBApplicationID:UInt = 29050
-let kQBRegisterServiceKey = "pX4h97bhcZQJtMC"
-let kQBRegisterServiceSecret = "7rf-EYjaK3cxGYX"
+let kQBAuthKey = "pX4h97bhcZQJtMC"
+let kQBAuthSecret = "7rf-EYjaK3cxGYX"
 let kQBAccountKey = "7yvNe17TnjNUqDoPwfqp"
 
 @UIApplicationMain
@@ -21,9 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         // Set QuickBlox credentials (You must create application in admin.quickblox.com).
-		QBApplication.sharedApplication().applicationId = kQBApplicationID
-		QBConnection.registerServiceKey(kQBRegisterServiceKey)
-		QBConnection.registerServiceSecret(kQBRegisterServiceSecret)
+        QBSettings.setApplicationID(kQBApplicationID)
+        QBSettings.setAuthKey(kQBAuthKey)
+        QBSettings.setAuthSecret(kQBAuthSecret)
         QBSettings.setAccountKey(kQBAccountKey)
                 
         // Enables Quickblox REST API calls debug console output.
@@ -97,7 +97,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
 	
 	func applicationWillTerminate(application: UIApplication) {
         // Logging out from chat.
-		ServicesManager.instance().chatService?.logoutChat()
+		ServicesManager.instance().chatService.disconnectWithCompletionBlock(nil)
 	}
 	
     // MARK: NotificationServiceDelegate protocol

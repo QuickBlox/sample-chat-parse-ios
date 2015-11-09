@@ -164,25 +164,13 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         if self.dialog?.type != QBChatDialogType.Private {
             self.title = self.dialog?.name
         } else {
-            self.title = String(self.dialog!.recipientID)
+            if let recepeint = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(UInt(self.dialog!.recipientID)) {
+                self.title = recepeint.login
+            }
         }
     }
     
     func updateMessages() {
-        var isProgressHUDShowed = false
-        
-        if self.items.count > 0 {
-            if self.dialog?.type != QBChatDialogType.Private {
-                isProgressHUDShowed = true
-            }
-            else {
-                isProgressHUDShowed = false
-            }
-        }
-        else {
-            isProgressHUDShowed = true
-            SVProgressHUD.showWithStatus("SA_STR_LOADING_MESSAGES".localized, maskType: SVProgressHUDMaskType.Clear)
-        }
         
         weak var weakSelf = self
         
@@ -192,10 +180,6 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             if response.error == nil {
                 
                 weakSelf?.scrollToBottomAnimated(false)
-                
-                if isProgressHUDShowed {
-                    SVProgressHUD.showSuccessWithStatus("SA_STR_COMPLETED".localized)
-                }
                 
             } else {
                 SVProgressHUD.showErrorWithStatus(response.error?.error?.localizedDescription)
@@ -211,26 +195,24 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
     
     static func sendReadStatusForMessage(message: QBChatMessage) {
         if message.senderID != QBSession.currentSession().currentUser!.ID && (message.readIDs == nil || !(message.readIDs as! [Int]).contains(Int(QBSession.currentSession().currentUser!.ID))) {
-            
-            message.markable = true
-            // Sending read status for message.
-            if !QBChat.instance().readMessage(message) {
-                NSLog("Problems while marking message as read!")
-            }
-            else {
-                if UIApplication.sharedApplication().applicationIconBadgeNumber > 0 {
-                    UIApplication.sharedApplication().applicationIconBadgeNumber--
+            ServicesManager.instance().chatService.readMessage(message, completion: { (error: NSError?) -> Void in
+                //
+                if (error != nil) {
+                    NSLog("Problems while marking message as read! Error: %@", error!)
                 }
-            }
+                else {
+                    if UIApplication.sharedApplication().applicationIconBadgeNumber > 0 {
+                        UIApplication.sharedApplication().applicationIconBadgeNumber--
+                    }
+                }
+            })
         }
     }
     
     func readMessages(messages: [QBChatMessage], dialogID: String) {
         
-        if QBChat.instance().isLoggedIn() {
-            for message in messages {
-                ChatViewController.sendReadStatusForMessage(message)
-            }
+        if QBChat.instance().isConnected() {
+            ServicesManager.instance().chatService.readMessages(messages, forDialogID: dialogID, completion: nil)
         } else {
             self.unreadMessages = messages
         }
@@ -295,6 +277,8 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         
         let message = QBChatMessage()
         message.text = text;
+        message.deliveredIDs = [(self.senderID)]
+        message.readIDs = [(self.senderID)]
         message.senderID = self.senderID
         message.markable = true
         
@@ -307,15 +291,14 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
     func sendMessage(message: QBChatMessage) {
         
         // Sending message.
-        let didSent = ServicesManager.instance().chatService.sendMessage(message, toDialogId: self.dialog?.ID, save: true) { (error:NSError!) -> Void in
-        }
-        
-        if !didSent {
-            TWMessageBarManager.sharedInstance().showMessageWithTitle("SA_STR_ERROR".localized, description: "SA_STR_CANT_SEND_A_MESSAGE".localized, type: TWMessageBarMessageType.Info)
+        ServicesManager.instance().chatService.sendMessage(message, type: QMMessageType.Text, toDialogID: self.dialog?.ID, saveToHistory: true, saveToStorage: true) { (error: NSError?) -> Void in
+            //
+            if (error != nil) {
+                TWMessageBarManager.sharedInstance().showMessageWithTitle("SA_STR_ERROR".localized, description: error?.localizedRecoverySuggestion, type: TWMessageBarMessageType.Info)
+            }
         }
         
         self.finishSendingMessageAnimated(true)
-        
     }
     
     /**
@@ -506,7 +489,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
     
     
     override func topLabelAttributedStringForItem(messageItem: QBChatMessage!) -> NSAttributedString? {
-
+        
         if messageItem.senderID == self.senderID || self.dialog?.type == QBChatDialogType.Private {
             return nil
         }
@@ -515,7 +498,11 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         attributes[NSForegroundColorAttributeName] = UIColor(red: 11.0/255.0, green: 96.0/255.0, blue: 255.0/255.0, alpha: 1.0)
         attributes[NSFontAttributeName] = UIFont(name: "Helvetica", size: 17)
         
-        let topLabelAttributedString = NSAttributedString(string: String(messageItem.senderID), attributes: attributes)
+        var topLabelAttributedString : NSAttributedString?
+        
+        if let topLabelText = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(messageItem.senderID)?.login {
+            topLabelAttributedString = NSAttributedString(string: topLabelText, attributes: attributes)
+        }
         
         return topLabelAttributedString
     }

@@ -9,43 +9,22 @@
 
 class ChatUsersInfoTableViewController: UITableViewController, QMChatServiceDelegate, QMChatConnectionDelegate {
     
-    var occupantIDs : [UInt] = []
     var users : [QBUUser] = []
     
     var dialog: QBChatDialog?
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        if let occupantsIDs = self.dialog?.occupantIDs as? [UInt] {
+            self.users = ServicesManager.instance().usersService.usersMemoryStorage.usersWithIDs(occupantsIDs, withoutID: ServicesManager.instance().currentUser().ID) as! [QBUUser]
+        }
+    }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
         ServicesManager.instance().chatService.addDelegate(self)
-    }
-    
-    override func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        self.occupantIDs.removeAll()
-        
-        for occupantID in dialog!.occupantIDs! {
-            
-            if (UInt(occupantID.unsignedIntegerValue) == ServicesManager.instance().currentUser().ID) {
-                continue
-            }
-            
-            self.occupantIDs.append(UInt(occupantID))
-        }
-        
-        ServicesManager.instance().usersService.getUsersWithIDs(self.occupantIDs).continueWithBlock {[unowned self] (task : BFTask!) -> AnyObject! in
-            
-            let users : [QBUUser] = task.result as! [QBUUser]
-            
-            for user in users {
-                self.users.append(user)
-            }
-            
-            self.tableView.reloadData()
-            
-            return nil
-        }
     }
     
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
