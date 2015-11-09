@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/External/XMPP/Extensions/XEP-0308/XMPPMessage+XEP_0308.h

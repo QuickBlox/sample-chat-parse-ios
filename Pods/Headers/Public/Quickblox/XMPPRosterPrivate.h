@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/External/XMPP/Extensions/Roster/XMPPRosterPrivate.h

@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/Business/QBSettings/QBSettings_Private.h

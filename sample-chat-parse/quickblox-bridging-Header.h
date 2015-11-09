@@ -13,6 +13,7 @@
 @import Foundation;
 @import SystemConfiguration;
 @import MobileCoreServices;
+@import Quickblox;
 
 #import <Parse/Parse.h>
 

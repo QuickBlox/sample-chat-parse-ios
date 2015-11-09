@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/ChatService/Classes/Net/Server/QBChatAction.h

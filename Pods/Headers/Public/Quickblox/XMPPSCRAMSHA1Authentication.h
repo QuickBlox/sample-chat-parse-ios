@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/External/XMPP/Authentication/SCRAM-SHA-1/XMPPSCRAMSHA1Authentication.h

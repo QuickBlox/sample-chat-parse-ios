@@ -17,6 +17,7 @@
 		2CBFAA1C1BA0342900F7065D /* Launch Screen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2CBFAA1B1BA0342900F7065D /* Launch Screen.xib */; };
 		2CD5B60E1BC25C9400C635C2 /* SessionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CD5B60D1BC25C9400C635C2 /* SessionService.swift */; };
 		2CEF78981B4581E20094E6BA /* UIImage+fixOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CEF78971B4581E20094E6BA /* UIImage+fixOrientation.m */; };
+		5823FF5B1BF0C19F007C76EC /* Quickblox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5823FF5A1BF0C19F007C76EC /* Quickblox.framework */; };
 		58C1E2721BAFF1D0006DF84F /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58C1E2711BAFF1D0006DF84F /* NotificationService.swift */; };
 		684400CE32CC2D4D22A5AFD5 /* AlertViewWithTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 684403034A069565608E044A /* AlertViewWithTextField.swift */; };
 		684400F787FBE39BBA9B52C8 /* ChatUsersInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68440DDFBC8DF8C88DEE2898 /* ChatUsersInfoTableViewController.swift */; };
@@ -49,6 +50,7 @@
 		2CD5B60D1BC25C9400C635C2 /* SessionService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SessionService.swift; sourceTree = "<group>"; };
 		2CEF78961B4581E20094E6BA /* UIImage+fixOrientation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+fixOrientation.h"; sourceTree = "<group>"; };
 		2CEF78971B4581E20094E6BA /* UIImage+fixOrientation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+fixOrientation.m"; sourceTree = "<group>"; };
+		5823FF5A1BF0C19F007C76EC /* Quickblox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quickblox.framework; path = Framework/Quickblox.framework; sourceTree = "<group>"; };
 		58C1E2711BAFF1D0006DF84F /* NotificationService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		68440035DAA846751DEDBE4D /* DialogsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DialogsViewController.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6844013BAAEEEAE22EEAA322 /* LoginTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5823FF5B1BF0C19F007C76EC /* Quickblox.framework in Frameworks */,
 				E3F8AED4F4440098C11FBD3A /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -133,6 +136,7 @@
 		5B6D920FF484FAD0667CB524 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5823FF5A1BF0C19F007C76EC /* Quickblox.framework */,
 				BA0B02E7C454E30DCBD49B39 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -226,7 +230,6 @@
 				1437A7891AC9948600A39692 /* Frameworks */,
 				1437A78A1AC9948600A39692 /* Resources */,
 				68E04C85563E877E993200DD /* Copy Pods Resources */,
-				2BB3A152ED3DFB85F98005D0 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -287,21 +290,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2BB3A152ED3DFB85F98005D0 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		68E04C85563E877E993200DD /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -473,6 +461,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../Framework\"",
 					"/Users/injoit/Development/iOS/quickblox-ios-sdk/Framework",
+					"$(PROJECT_DIR)/Framework",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -507,6 +496,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/../Framework\"",
 					"/Users/injoit/Development/iOS/quickblox-ios-sdk/Framework",
+					"$(PROJECT_DIR)/Framework",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
