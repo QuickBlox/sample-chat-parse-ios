@@ -281,6 +281,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         message.readIDs = [(self.senderID)]
         message.senderID = self.senderID
         message.markable = true
+        message.dateSent = date
         
         self.sendMessage(message)
         

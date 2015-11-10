@@ -40,6 +40,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
         if (remoteNotification != nil) {
             ServicesManager.instance().notificationService?.pushDialogID = remoteNotification["SA_STR_PUSH_NOTIFICATION_DIALOG_ID".localized] as? String
         }
+        
+        UINavigationBar.appearance().titleTextAttributes = [
+            NSFontAttributeName: UIFont(name: "HelveticaNeue-Medium", size: 17)!
+        ]
+        UIBarButtonItem.appearance().setTitleTextAttributes(
+            [NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 17)!],
+            forState: UIControlState.Normal
+        )
 		
 		return true
 	}

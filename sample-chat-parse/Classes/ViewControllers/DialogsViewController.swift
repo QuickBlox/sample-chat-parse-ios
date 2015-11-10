@@ -109,7 +109,7 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
             
         } else {
             
-            SVProgressHUD.showWithStatus("Connecting")
+            SVProgressHUD.showWithStatus("Connecting", maskType:SVProgressHUDMaskType.Clear)
             if SessionService.isCanRestoreSession() {
                 
                 SessionService.restoreSession({ (error) -> Void in
@@ -313,7 +313,7 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
                     dialog.occupantIDs = occupantIDs
                     
                     // Notifies occupants that user left the dialog.
-                    ServicesManager.instance().chatService.notifyAboutUpdateDialog(dialog, occupantsCustomParameters: nil, notificationText: "User \(ServicesManager.instance().currentUser().login) has left the dialog", completion: { (error) -> Void in
+                    ServicesManager.instance().chatService.notifyAboutUpdateDialog(dialog, occupantsCustomParameters: nil, notificationText: "User \(ServicesManager.instance().currentUser().login!) has left the dialog", completion: { (error) -> Void in
                         deleteDialogBlock(dialog)
                     })
                 }
