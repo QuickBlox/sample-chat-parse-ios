@@ -402,7 +402,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "-DDEBUG";
-				PROVISIONING_PROFILE = "6651e5e3-1f6f-473e-b306-925fc2adeca2";
+				PROVISIONING_PROFILE = "a303c6f2-41f4-431c-b9ea-c8e61f185b86";
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -441,7 +441,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "$(inherited)";
 				OTHER_SWIFT_FLAGS = "-DRELEASE";
-				PROVISIONING_PROFILE = "e1f90b6f-2770-46ef-ae43-ec3143b0c9a8";
+				PROVISIONING_PROFILE = "27c5d61a-2947-4102-b85c-1ddf89ccd253";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -477,7 +477,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quickblox.parse.chat;
 				PRODUCT_NAME = "sample-chat-parse";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "a303c6f2-41f4-431c-b9ea-c8e61f185b86";
 				SWIFT_OBJC_BRIDGING_HEADER = "sample-chat-parse/quickblox-bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -512,7 +512,7 @@
 				OTHER_LDFLAGS = "$(inherited)";
 				PRODUCT_BUNDLE_IDENTIFIER = com.quickblox.parse.chat;
 				PRODUCT_NAME = "sample-chat-parse";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "27c5d61a-2947-4102-b85c-1ddf89ccd253";
 				SWIFT_OBJC_BRIDGING_HEADER = "sample-chat-parse/quickblox-bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
