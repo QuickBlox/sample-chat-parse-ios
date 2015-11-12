@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/QBCore/QBConnection_Private.h

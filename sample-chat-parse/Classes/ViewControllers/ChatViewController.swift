@@ -106,11 +106,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             
             var viewControllers: [UIViewController] = []
             
-            if let loginViewControllers = self.navigationController?.viewControllers[0] as? LoginTableViewController {
-                viewControllers.append(loginViewControllers)
-            }
-            
-            if let dialogsViewControllers = self.navigationController?.viewControllers[1] as? DialogsViewController {
+            if let dialogsViewControllers = self.navigationController?.viewControllers[0] as? DialogsViewController {
                 viewControllers.append(dialogsViewControllers)
             }
             
@@ -126,6 +122,11 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         if let dialog = self.dialog {
             // Saving current dialog ID.
             ServicesManager.instance().currentDialogID = dialog.ID!
+            
+            ServicesManager.instance().usersService.getUsersWithIDs(dialog.occupantIDs).continueWithBlock({ [weak self] (task: BFTask!) -> AnyObject! in
+                self?.refreshCollectionView()
+                return nil
+            })
         }
     }
 	
@@ -163,27 +164,13 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         if self.dialog?.type != QBChatDialogType.Private {
             self.title = self.dialog?.name
         } else {
-            if let recepeint = ServicesManager.instance().usersService.user(UInt(self.dialog!.recipientID)) {
+            if let recepeint = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(UInt(self.dialog!.recipientID)) {
                 self.title = recepeint.login
             }
         }
     }
     
     func updateMessages() {
-        var isProgressHUDShowed = false
-        
-        if self.items.count > 0 {
-            if self.dialog?.type != QBChatDialogType.Private {
-                isProgressHUDShowed = true
-            }
-            else {
-                isProgressHUDShowed = false
-            }
-        }
-        else {
-            isProgressHUDShowed = true
-            SVProgressHUD.showWithStatus("SA_STR_LOADING_MESSAGES".localized, maskType: SVProgressHUDMaskType.Clear)
-        }
         
         weak var weakSelf = self
         
@@ -193,10 +180,6 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             if response.error == nil {
                 
                 weakSelf?.scrollToBottomAnimated(false)
-                
-                if isProgressHUDShowed {
-                    SVProgressHUD.showSuccessWithStatus("SA_STR_COMPLETED".localized)
-                }
                 
             } else {
                 SVProgressHUD.showErrorWithStatus(response.error?.error?.localizedDescription)
@@ -212,26 +195,24 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
     
     static func sendReadStatusForMessage(message: QBChatMessage) {
         if message.senderID != QBSession.currentSession().currentUser!.ID && (message.readIDs == nil || !(message.readIDs as! [Int]).contains(Int(QBSession.currentSession().currentUser!.ID))) {
-            
-            message.markable = true
-            // Sending read status for message.
-            if !QBChat.instance().readMessage(message) {
-                NSLog("Problems while marking message as read!")
-            }
-            else {
-                if UIApplication.sharedApplication().applicationIconBadgeNumber > 0 {
-                    UIApplication.sharedApplication().applicationIconBadgeNumber--
+            ServicesManager.instance().chatService.readMessage(message, completion: { (error: NSError?) -> Void in
+                //
+                if (error != nil) {
+                    NSLog("Problems while marking message as read! Error: %@", error!)
                 }
-            }
+                else {
+                    if UIApplication.sharedApplication().applicationIconBadgeNumber > 0 {
+                        UIApplication.sharedApplication().applicationIconBadgeNumber--
+                    }
+                }
+            })
         }
     }
     
     func readMessages(messages: [QBChatMessage], dialogID: String) {
         
-        if QBChat.instance().isLoggedIn() {
-            for message in messages {
-                ChatViewController.sendReadStatusForMessage(message)
-            }
+        if QBChat.instance().isConnected() {
+            ServicesManager.instance().chatService.readMessages(messages, forDialogID: dialogID, completion: nil)
         } else {
             self.unreadMessages = messages
         }
@@ -296,8 +277,11 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         
         let message = QBChatMessage()
         message.text = text;
+        message.deliveredIDs = [(self.senderID)]
+        message.readIDs = [(self.senderID)]
         message.senderID = self.senderID
         message.markable = true
+        message.dateSent = date
         
         self.sendMessage(message)
         
@@ -308,15 +292,14 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
     func sendMessage(message: QBChatMessage) {
         
         // Sending message.
-        let didSent = ServicesManager.instance().chatService.sendMessage(message, toDialogId: self.dialog?.ID, save: true) { (error:NSError!) -> Void in
-        }
-        
-        if !didSent {
-            TWMessageBarManager.sharedInstance().showMessageWithTitle("SA_STR_ERROR".localized, description: "SA_STR_CANT_SEND_A_MESSAGE".localized, type: TWMessageBarMessageType.Info)
+        ServicesManager.instance().chatService.sendMessage(message, type: QMMessageType.Text, toDialogID: self.dialog?.ID, saveToHistory: true, saveToStorage: true) { (error: NSError?) -> Void in
+            //
+            if (error != nil) {
+                TWMessageBarManager.sharedInstance().showMessageWithTitle("SA_STR_ERROR".localized, description: error?.localizedRecoverySuggestion, type: TWMessageBarMessageType.Info)
+            }
         }
         
         self.finishSendingMessageAnimated(true)
-        
     }
     
     /**
@@ -388,18 +371,17 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             
             if !messageReadIDs.isEmpty {
                 for readID : Int in messageReadIDs {
-                    let user = ServicesManager.instance().usersService.user(UInt(readID))
-                    
-                    if user != nil {
-                        readersLogin.append(user!.login!)
+                    if let user = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(UInt(readID)) {
+                        readersLogin.append(user.login!)
                     } else {
-                        readersLogin.append("Unknown")
+                        readersLogin.append(String(readID))
                     }
                 }
+                
                 if message.attachments?.count > 0 {
-                    statusString += "Seen:" + readersLogin.joinWithSeparator(", ")
+                    statusString += "Seen: " + readersLogin.joinWithSeparator(", ")
                 } else {
-                    statusString += "Read:" + readersLogin.joinWithSeparator(", ")
+                    statusString += "Read: " + readersLogin.joinWithSeparator(", ")
                 }
 
             }
@@ -413,17 +395,11 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             }
             
             if !messageDeliveredIDs.isEmpty {
+                
                 for deliveredID : Int in messageDeliveredIDs {
-                    let user = ServicesManager.instance().usersService.user(UInt(deliveredID))
-                    
-                    if readersLogin.contains(user!.login!) {
-                        continue
-                    }
-                    
-                    if user != nil {
-                        deliveredLogin.append(user!.login!)
+                    if let user = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(UInt(deliveredID)) {                    deliveredLogin.append(user.login!);
                     } else {
-                        deliveredLogin.append("Unknown");
+                        deliveredLogin.append(String(deliveredID))
                     }
                 }
                 
@@ -432,7 +408,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
                 }
                 
                 if deliveredLogin.count > 0 {
-                    statusString += "Delivered:" + deliveredLogin.joinWithSeparator(" ,")
+                    statusString += "Delivered: " + deliveredLogin.joinWithSeparator(" ,")
                 }
             }
         }
@@ -514,7 +490,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
     
     
     override func topLabelAttributedStringForItem(messageItem: QBChatMessage!) -> NSAttributedString? {
-
+        
         if messageItem.senderID == self.senderID || self.dialog?.type == QBChatDialogType.Private {
             return nil
         }
@@ -525,7 +501,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
         
         var topLabelAttributedString : NSAttributedString?
         
-        if let topLabelText = ServicesManager.instance().usersService.user(messageItem.senderID)?.login {
+        if let topLabelText = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(messageItem.senderID)?.login {
             topLabelAttributedString = NSAttributedString(string: topLabelText, attributes: attributes)
         }
         

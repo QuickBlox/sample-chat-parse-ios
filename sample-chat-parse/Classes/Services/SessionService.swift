@@ -66,6 +66,7 @@ class SessionService : NSObject {
             let quickbloxUser = QBUUser()
             quickbloxUser.login = username
             quickbloxUser.password = password
+            quickbloxUser.fullName = username
             
             QBRequest.signUp(quickbloxUser, successBlock: { (response: QBResponse, users: QBUUser?) -> Void in
                 

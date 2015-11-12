@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/External/XMPP/Authentication/Digest-MD5/XMPPDigestMD5Authentication.h

@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/Helpers/QBNetworking/QBRequest+session.h

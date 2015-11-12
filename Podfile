@@ -1,8 +1,10 @@
 platform :ios, "7.0"
 
+#Quickblox
+pod 'QMCVDevelopment', :git => 'git@github.com:QuickBlox/QMChatViewController-ios.git', :branch => 'development'
+pod 'QMServicesDevelopment', :git => 'git@github.com:QuickBlox/q-municate-services-ios.git', :branch => 'development'
+
+#extra
 pod 'SVProgressHUD'
 pod 'TWMessageBarManager', '~> 1.7.2'
-pod 'QMChatViewController', :podspec => '../quickblox-ios-sdk/QMChatViewControllerDevelopment.podspec'
-pod 'QMServices', :podspec => '../quickblox-ios-sdk/QMServicesDevelopment.podspec'
-pod 'Quickblox', :path => '../SDK-ios/'
 pod 'Parse'
