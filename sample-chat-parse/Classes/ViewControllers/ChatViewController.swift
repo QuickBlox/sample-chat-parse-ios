@@ -253,6 +253,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             let message = QBChatMessage()
             message.senderID = ServicesManager.instance().currentUser().ID
             message.dialogID = weakSelf?.dialog?.ID
+            message.dateSent = NSDate()
             
             // Sending attachment.
             ServicesManager.instance().chatService.chatAttachmentService.sendMessage(message, toDialog: weakSelf?.dialog, withChatService: ServicesManager.instance().chatService, withAttachedImage: resizedImage, completion: { (error: NSError!) -> Void in
