@@ -26,7 +26,6 @@
 #import "QMChatNotificationCell.h"
 #import "QMChatIncomingCell.h"
 #import "QMChatOutgoingCell.h"
-#import "QMLoadEarlierHeaderView.h"
 #import "QMCollectionViewFlowLayoutInvalidationContext.h"
 
 #import "TTTAttributedLabel.h"
