@@ -136,8 +136,16 @@ class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMC
                 
             } else {
                 
+                let usersWithoutCurrentUser : [QBUUser]? = ((ServicesManager.instance().usersService.usersMemoryStorage.unsortedUsers() as! [QBUUser]).filter({$0.ID != ServicesManager.instance().currentUser().ID}))
+                
+                let primaryUsers = usersWithoutCurrentUser?.filter({(dialog.occupantIDs as! [UInt]).contains(($0 as QBUUser).ID)})
+                
+                if primaryUsers != nil && primaryUsers!.count > 0 {
+                    users.appendContentsOf(primaryUsers! as [QBUUser])
+                }
+                
                 let chatName = NewDialogViewController.nameForGroupChatWithUsers(users)
-
+                
                 NewDialogViewController.createChat(chatName, users: users, completion: completion)
             }
             
