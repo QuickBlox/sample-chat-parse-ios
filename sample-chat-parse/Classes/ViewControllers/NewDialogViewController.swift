@@ -315,8 +315,9 @@ class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMC
             
             let selectedUser = (self.searchController.searchResultsController as! UsersSearchResultsController).users[indexPath.row]
             
+            self.searchController.active = false
+            
             if !self.users.contains(selectedUser) {
-                self.searchController.active = false
                 
                 if (self.users.count == 0) {
                     self.updateHeader(true)
@@ -328,9 +329,11 @@ class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMC
                 
                 self.tableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
                 self.tableView.selectRowAtIndexPath(newIndexPath, animated: true, scrollPosition: UITableViewScrollPosition.None)
-                
-                self.checkCreateChatButtonState()
+            } else {
+                self.tableView.selectRowAtIndexPath(NSIndexPath(forRow: self.users.indexOf(selectedUser)!, inSection: 0), animated: true, scrollPosition: UITableViewScrollPosition.None)
             }
+            
+            self.checkCreateChatButtonState()
         }
     }
     
