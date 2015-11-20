@@ -28,7 +28,8 @@ class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMC
         self.searchController.searchBar.delegate = self
         (self.searchController.searchResultsController as! UsersSearchResultsController).tableView.delegate = self
         
-        self.tableView.tableHeaderView?.addSubview(self.searchController.searchBar);
+        self.searchController.searchBar.sizeToFit()
+        self.tableView.tableHeaderView?.addSubview(self.searchController.searchBar)
         self.definesPresentationContext = true
         
         self.setupUsers()
