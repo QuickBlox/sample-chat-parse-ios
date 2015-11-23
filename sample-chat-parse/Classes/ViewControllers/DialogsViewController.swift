@@ -112,8 +112,13 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
             SVProgressHUD.showWithStatus("Connecting", maskType:SVProgressHUDMaskType.Clear)
             if SessionService.isCanRestoreSession() {
                 
-                SessionService.restoreSession({ (error) -> Void in
-                    self.navigationItem.title = "SA_STR_WELCOME".localized + " " + ServicesManager.instance().currentUser()!.login!
+                SessionService.restoreSession({ [unowned self] (error) -> Void in
+                    if (error != nil) {
+                        SVProgressHUD.showErrorWithStatus(error?.localizedDescription)
+                        self.performSegueWithIdentifier("goToAuth", sender: nil)
+                    } else {
+                        self.navigationItem.title = "SA_STR_WELCOME".localized + " " + ServicesManager.instance().currentUser()!.login!
+                    }
                 })
                 
             } else {
