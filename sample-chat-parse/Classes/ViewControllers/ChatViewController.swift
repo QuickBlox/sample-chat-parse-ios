@@ -599,19 +599,20 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
                         if attachmentCell.attachmentID != attachment.ID {
                             return
                         }
-                        
-                        self!.attachmentCellsMap.removeValueForKey(attachment.ID!)
-                        
-                        if error != nil {
-                            SVProgressHUD.showErrorWithStatus(error.localizedDescription)
-                        } else {
+                       
+                        if (self != nil) {
+                            self!.attachmentCellsMap.removeValueForKey(attachment.ID!)
                             
-                            if image != nil {
+                            if error != nil {
+                                SVProgressHUD.showErrorWithStatus(error.localizedDescription)
+                            } else {
                                 
-                                attachmentCell.setAttachmentImage(image)
-                                cell.updateConstraints()
+                                if image != nil {
+                                    
+                                    attachmentCell.setAttachmentImage(image)
+                                    cell.updateConstraints()
+                                }
                             }
-                            
                         }
                     })
                 }
@@ -656,6 +657,8 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             // Getting earlier messages for chat dialog identifier.
             ServicesManager.instance().chatService?.loadEarlierMessagesWithChatDialogID(self.dialog?.ID).continueWithBlock({
                 [weak self] (task: BFTask!) -> AnyObject! in
+                
+                if self == nil { return nil }
                 
                 if (task.result.count > 0) {
                     self!.insertMessagesToTheTopAnimated(task.result as! [QBChatMessage]!)
