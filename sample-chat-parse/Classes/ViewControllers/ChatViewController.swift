@@ -307,8 +307,6 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             //
             if (error != nil) {
                 TWMessageBarManager.sharedInstance().showMessageWithTitle("SA_STR_ERROR".localized, description: error?.localizedRecoverySuggestion, type: TWMessageBarMessageType.Info)
-            } else {
-                self.insertMessageToTheBottomAnimated(message)
             }
         }
         
@@ -678,6 +676,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
     func chatService(chatService: QMChatService!, didAddMessageToMemoryStorage message: QBChatMessage!, forDialogID dialogID: String!) {
         
         if self.dialog?.ID == dialogID {
+            // Insert message received from XMPP or self sent
             self.insertMessageToTheBottomAnimated(message)
         }
     }
