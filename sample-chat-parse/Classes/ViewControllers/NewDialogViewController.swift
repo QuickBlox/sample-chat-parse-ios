@@ -218,7 +218,7 @@ class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMC
     
     static func nameForGroupChatWithUsers(users:[QBUUser]) -> String {
         
-        let chatName = ServicesManager.instance().currentUser()!.login! + "_" + users.map({ $0.login ?? $0.email! }).joinWithSeparator(", ").stringByReplacingOccurrencesOfString("@", withString: "", options: NSStringCompareOptions.LiteralSearch, range: nil)
+        let chatName = ServicesManager.instance().currentUser()!.login! + ", " + users.map({ $0.login ?? $0.email! }).joinWithSeparator(", ")
         
         return chatName
     }
