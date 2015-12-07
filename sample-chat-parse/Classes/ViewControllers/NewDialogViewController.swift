@@ -187,9 +187,9 @@ class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMC
             if (response.error == nil) {
                 
                 // Notifies users about new dialog with them.
-                ServicesManager.instance().chatService.notifyUsersWithIDs(usersIDs, aboutAddingToDialog: dialog, completion: { (error: NSError?) -> Void in
+                ServicesManager.instance().chatService.sendSystemMessageAboutAddingToDialog(dialog, toUsersIDs: usersIDs, completion: { (error: NSError?) -> Void in
                     // Notifies existing dialog occupants about new users.
-                    ServicesManager.instance().chatService.notifyAboutUpdateDialog(dialog, occupantsCustomParameters: nil, notificationText: self.updatedMessageWithUsers(users), completion: nil)
+                    ServicesManager.instance().chatService.sendMessageAboutUpdateDialog(dialog, withNotificationText: self.updatedMessageWithUsers(users), customParameters: nil, completion: nil)
                 })
                 
                 print(dialog)
@@ -243,7 +243,7 @@ class NewDialogViewController: UITableViewController, QMChatServiceDelegate, QMC
             ServicesManager.instance().chatService.createGroupChatDialogWithName(name, photo: nil, occupants: users) { (response: QBResponse!, chatDialog: QBChatDialog!) -> Void in
                 
                 if (chatDialog != nil) {
-                    ServicesManager.instance().chatService.notifyUsersWithIDs(chatDialog.occupantIDs, aboutAddingToDialog: chatDialog, completion: nil)
+                    ServicesManager.instance().chatService.sendSystemMessageAboutAddingToDialog(chatDialog, toUsersIDs: chatDialog.occupantIDs, completion: nil)
                 }
                 
                 SVProgressHUD.showSuccessWithStatus("STR_DIALOG_CREATED".localized)
