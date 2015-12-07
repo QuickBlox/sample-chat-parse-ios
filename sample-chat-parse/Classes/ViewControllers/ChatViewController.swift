@@ -101,11 +101,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
             
             var viewControllers: [UIViewController] = []
             
-            if let loginViewControllers = self.navigationController?.viewControllers[0] as? LoginTableViewController {
-                viewControllers.append(loginViewControllers)
-            }
-            
-            if let dialogsViewControllers = self.navigationController?.viewControllers[1] as? DialogsViewController {
+            if let dialogsViewControllers = self.navigationController?.viewControllers.first as? DialogsViewController {
                 viewControllers.append(dialogsViewControllers)
             }
             
