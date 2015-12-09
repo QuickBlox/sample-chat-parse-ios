@@ -57,7 +57,7 @@ class ServicesManager: QMServicesManager {
         }
         
         TWMessageBarManager.sharedInstance().hideAll()
-        TWMessageBarManager.sharedInstance().showMessageWithTitle(dialogName, description: message.text, type: TWMessageBarMessageType.Info)
+        TWMessageBarManager.sharedInstance().showMessageWithTitle(dialogName, description: message.encodedText, type: TWMessageBarMessageType.Info)
     }
     
     // MARK: Last activity date
