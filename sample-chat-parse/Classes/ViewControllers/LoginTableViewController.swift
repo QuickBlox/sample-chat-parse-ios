@@ -28,6 +28,14 @@ class LoginTableViewController: UITableViewController {
     }
     
     @IBAction func nextButtonClicked(sender: AnyObject) {
+        
+        let regex = try! NSRegularExpression(pattern: ".*[^A-Za-z0-9_].*", options: [])
+        if regex.firstMatchInString(self.loginTextField.text!, options: [], range: NSMakeRange(0, self.loginTextField.text!.characters.count)) != nil {
+            
+            SVProgressHUD.showErrorWithStatus("SA_STR_WRONG_USERNAME".localized)
+            return
+        }
+        
         SVProgressHUD.showWithStatus("SA_STR_LOGGIN_IN_AS".localized + self.loginTextField.text!, maskType: SVProgressHUDMaskType.Clear)
         
         SessionService.logInWithUsername(self.loginTextField.text!, password: kTestUsersDefaultPassword) { (error : NSError?) -> Void in
