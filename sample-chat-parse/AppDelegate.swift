@@ -96,9 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
 	
 	func applicationWillEnterForeground(application: UIApplication) {
         // Logging in to chat.
-        if ServicesManager.instance().isAuthorized(){
-            ServicesManager.instance().chatService?.connectWithCompletionBlock(nil)
-        }
+        ServicesManager.instance().chatService?.connectWithCompletionBlock(nil)
 	}
 	
 	func applicationDidBecomeActive(application: UIApplication) {
