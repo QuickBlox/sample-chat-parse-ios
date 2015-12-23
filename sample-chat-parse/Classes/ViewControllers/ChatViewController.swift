@@ -342,12 +342,8 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
                         readersLogin.append("Unknown")
                     }
                 }
-                if message.attachments?.count > 0 {
-                    statusString += "Seen:" + readersLogin.joinWithSeparator(", ")
-                } else {
-                    statusString += "Read:" + readersLogin.joinWithSeparator(", ")
-                }
 
+                statusString += message.isMediaMessage() ? "Seen: " : "Read: " + readersLogin.joinWithSeparator(", ")
             }
         }
         
@@ -378,7 +374,7 @@ class ChatViewController: QMChatViewController, QMChatServiceDelegate, UIActionS
                 }
                 
                 if deliveredLogin.count > 0 {
-                    statusString += "Delivered:" + deliveredLogin.joinWithSeparator(", ")
+                    statusString += "Delivered: " + deliveredLogin.joinWithSeparator(", ")
                 }
             }
         }
