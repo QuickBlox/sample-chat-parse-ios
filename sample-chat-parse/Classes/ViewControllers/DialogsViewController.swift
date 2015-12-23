@@ -353,6 +353,7 @@ class DialogsViewController: UITableViewController, QMChatServiceDelegate, QMCha
     }
     
     func chatService(chatService: QMChatService!, didAddChatDialogToMemoryStorage chatDialog: QBChatDialog!) {
+        ServicesManager.instance().usersService.getUsersWithIDs(chatDialog.occupantIDs)
         self.tableView.reloadData()
     }
     
