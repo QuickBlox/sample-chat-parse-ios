@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/External/XMPP/Extensions/XEP-0198/Memory Storage/XMPPStreamManagementMemoryStorage.h

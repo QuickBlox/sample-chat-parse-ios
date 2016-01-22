@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/Core/External/XMPP/Authentication/X-Facebook-Platform/XMPPXFacebookPlatformAuthentication.h

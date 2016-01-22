@@ -8,6 +8,8 @@
 
 import Foundation
 
+let kTestUsersDefaultPassword = "x6Bt0VDy5"
+
 typealias CompletionWithError = (error : NSError?) -> Void
 
 class SessionService : NSObject {
@@ -64,6 +66,7 @@ class SessionService : NSObject {
             let quickbloxUser = QBUUser()
             quickbloxUser.login = username
             quickbloxUser.password = password
+            quickbloxUser.fullName = username
             
             QBRequest.signUp(quickbloxUser, successBlock: { (response: QBResponse, users: QBUUser?) -> Void in
                 
@@ -91,6 +94,7 @@ class SessionService : NSObject {
         if isCanRestoreSession {
             
             let parseUser = PFUser.currentUser()
+            parseUser!.password = kTestUsersDefaultPassword
             
             SessionService.logInWithParseUser(parseUser!, completion: completion)
         }

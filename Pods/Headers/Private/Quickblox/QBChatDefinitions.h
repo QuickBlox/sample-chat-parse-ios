@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/PublicHeaders/QBChatDefinitions.h

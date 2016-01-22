@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/PublicHeaders/QBRequest+QBChat.h

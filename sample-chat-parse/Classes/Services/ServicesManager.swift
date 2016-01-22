@@ -11,24 +11,22 @@ import Foundation
 /**
 *  Implements user's memory/cache storing, error handling, show top bar notifications.
 */
-class ServicesManager: QMServicesManager, QMContactListServiceCacheDataSource {
+class ServicesManager: QMServicesManager {
     
     var currentDialogID : String = ""
     
-    private var contactListService : QMContactListService!
-    var usersService : UsersService!
     var notificationService: NotificationService!
     
     override init() {
         super.init()
         
         self.setupContactServices()
+        
+        self.usersService.loadFromCache()
+        
     }
     
     private func setupContactServices() {
-        QMContactListCache.setupDBWithStoreNamed("sample-cache-contacts")
-        self.contactListService = QMContactListService(serviceManager: self, cacheDataSource: self)
-        self.usersService = UsersService(contactListService: self.contactListService)
         self.notificationService = NotificationService()
     }
     
@@ -50,16 +48,30 @@ class ServicesManager: QMServicesManager, QMContactListServiceCacheDataSource {
             if dialog.name != nil {
                 dialogName = dialog.name!
             }
-    
+            
         } else {
             
-            if let user = ServicesManager.instance().usersService.user(UInt(dialog.recipientID)) {
+            if let user = ServicesManager.instance().usersService.usersMemoryStorage.userWithID(UInt(dialog.recipientID)) {
                 dialogName = user.login!
             }
         }
         
         TWMessageBarManager.sharedInstance().hideAll()
-        TWMessageBarManager.sharedInstance().showMessageWithTitle(dialogName, description: message.text, type: TWMessageBarMessageType.Info)
+        TWMessageBarManager.sharedInstance().showMessageWithTitle(dialogName, description: message.encodedText, type: TWMessageBarMessageType.Info)
+    }
+    
+    // MARK: Last activity date
+    
+    var lastActivityDate: NSDate? {
+        get {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            return defaults.valueForKey("SA_STR_LAST_ACTIVITY_DATE".localized) as! NSDate?
+        }
+        set {
+            let defaults = NSUserDefaults.standardUserDefaults()
+            defaults.setObject(newValue, forKey: "SA_STR_LAST_ACTIVITY_DATE".localized)
+            defaults.synchronize()
+        }
     }
     
     // MARK: QMServiceManagerProtocol
@@ -91,21 +103,5 @@ class ServicesManager: QMServicesManager, QMContactListServiceCacheDataSource {
     override func chatService(chatService: QMChatService!, didAddMessageToMemoryStorage message: QBChatMessage!, forDialogID dialogID: String!) {
         super.chatService(chatService, didAddMessageToMemoryStorage: message, forDialogID: dialogID)
         self.handleNewMessage(message, dialogID: dialogID)
-    }
-    
-    // MARK: QMContactListServiceCacheDataSource
-    
-    func cachedUsers(block: QMCacheCollection!) {
-        // Retrieving users from cache sorted by full name.
-        QMContactListCache.instance().usersSortedBy("fullName", ascending: true) { (users: [AnyObject]!) -> Void in
-            block(users)
-        }
-    }
-    
-    func cachedContactListItems(block: QMCacheCollection!) {
-        // Retrieving all contact list items.
-        QMContactListCache.instance().contactListItems { (items: [AnyObject]!) -> Void in
-            block(items)
-        }
     }
 }

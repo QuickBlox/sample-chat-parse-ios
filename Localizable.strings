@@ -71,6 +71,7 @@
 
 // Errors
 "SA_STR_ERROR_DELETING" = "Error leaving";
+"SA_STR_WRONG_USERNAME" = "Username can't contain special characters";
 
 // Chat
 "SA_STR_CHAT_SEND" = "Send";

@@ -1,1 +1,0 @@
-../../../../../SDK-ios/Framework/PublicHeaders/QBChatMessage.h

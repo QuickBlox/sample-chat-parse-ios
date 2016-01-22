@@ -17,7 +17,6 @@
 
 #import <Parse/Parse.h>
 
-
 #import <QMServices.h>
 #import <SVProgressHUD.h>
 #import "UIAlertDialog.h"
@@ -27,7 +26,6 @@
 #import "QMChatNotificationCell.h"
 #import "QMChatIncomingCell.h"
 #import "QMChatOutgoingCell.h"
-#import "QMLoadEarlierHeaderView.h"
 #import "QMCollectionViewFlowLayoutInvalidationContext.h"
 
 #import "TTTAttributedLabel.h"

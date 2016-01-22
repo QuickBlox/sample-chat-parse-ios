@@ -9,8 +9,8 @@
 import UIKit
 
 let kQBApplicationID:UInt = 29050
-let kQBRegisterServiceKey = "pX4h97bhcZQJtMC"
-let kQBRegisterServiceSecret = "7rf-EYjaK3cxGYX"
+let kQBAuthKey = "pX4h97bhcZQJtMC"
+let kQBAuthSecret = "7rf-EYjaK3cxGYX"
 let kQBAccountKey = "7yvNe17TnjNUqDoPwfqp"
 
 @UIApplicationMain
@@ -21,9 +21,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 
         // Set QuickBlox credentials (You must create application in admin.quickblox.com).
-		QBApplication.sharedApplication().applicationId = kQBApplicationID
-		QBConnection.registerServiceKey(kQBRegisterServiceKey)
-		QBConnection.registerServiceSecret(kQBRegisterServiceSecret)
+        QBSettings.setApplicationID(kQBApplicationID)
+        QBSettings.setAuthKey(kQBAuthKey)
+        QBSettings.setAuthSecret(kQBAuthSecret)
         QBSettings.setAccountKey(kQBAccountKey)
                 
         // Enables Quickblox REST API calls debug console output.
@@ -40,6 +40,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
         if (remoteNotification != nil) {
             ServicesManager.instance().notificationService?.pushDialogID = remoteNotification["SA_STR_PUSH_NOTIFICATION_DIALOG_ID".localized] as? String
         }
+        
+        UINavigationBar.appearance().titleTextAttributes = [
+            NSFontAttributeName: UIFont(name: "HelveticaNeue-Medium", size: 17)!
+        ]
+        UIBarButtonItem.appearance().setTitleTextAttributes(
+            [NSFontAttributeName: UIFont(name: "HelveticaNeue", size: 17)!],
+            forState: UIControlState.Normal
+        )
 		
 		return true
 	}
@@ -73,7 +81,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
                     return
                 }
                 ServicesManager.instance().notificationService?.pushDialogID = dialogID
-                ServicesManager.instance().notificationService?.handlePushNotificationWithDelegate(self)
+                
+                // calling dispatch async for push notification handling to have priority in main queue
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    ServicesManager.instance().notificationService?.handlePushNotificationWithDelegate(self)
+                });
             }
         }
     }
@@ -83,14 +95,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
 	
 	func applicationDidEnterBackground(application: UIApplication) {
         // Logging out from chat.
-		ServicesManager.instance().chatService?.logoutChat()
+		ServicesManager.instance().chatService?.disconnectWithCompletionBlock(nil)
 	}
 	
 	func applicationWillEnterForeground(application: UIApplication) {
         // Logging in to chat.
-        ServicesManager.instance().chatService?.logIn({ (error: NSError!) -> Void in
-
-        })
+        ServicesManager.instance().chatService?.connectWithCompletionBlock(nil)
 	}
 	
 	func applicationDidBecomeActive(application: UIApplication) {
@@ -99,7 +109,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
 	
 	func applicationWillTerminate(application: UIApplication) {
         // Logging out from chat.
-		ServicesManager.instance().chatService?.logoutChat()
+		ServicesManager.instance().chatService.disconnectWithCompletionBlock(nil)
 	}
 	
     // MARK: NotificationServiceDelegate protocol
@@ -122,7 +132,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, NotificationServiceDelega
             navigatonController.popViewControllerAnimated(false);
         }
         
-        navigatonController.pushViewController(chatController, animated: false)
+        navigatonController.pushViewController(chatController, animated: true)
     }
     
     func notificationServiceDidFailFetchingDialog() {
